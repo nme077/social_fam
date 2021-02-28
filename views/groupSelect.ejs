@@ -1,0 +1,24 @@
+<%- include('./partials/header.ejs'); %>
+
+
+<div class="container">
+    <h1 class="text-center mb-5">Select your <%= appName %> group</h1>
+    <div class="row justify-content-md-center">
+        <form action="/select_group" method="POST" class="centered col-md-4">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                <label class="input-group-text" for="groupSelect">Fam</label>
+                </div>
+                <select class="custom-select" id="groupSelect" name="groupSelect">
+                <option value="" selected>Choose...</option>
+                <% groupArr.forEach(group => { %>
+                    <option value="<%= group._id %>"><%= group.name %></option>
+                <% }); %>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" id="submitGroup" disabled>Submit</button>
+        </form>
+    </div>
+</div>
+
+<%- include('./partials/footer.ejs'); %>

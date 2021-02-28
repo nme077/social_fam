@@ -1,4 +1,42 @@
-<script src="/dist/main.js"></script>
+<% if(successMessage && successMessage.length > 0 ) { %>
+    <div class="container alert-container">
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= successMessage %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>	
+    </div>
+<% }; %>
+<% if(errorMessage && errorMessage.length > 0) { %>
+    <div class="container alert-container">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+			<%= errorMessage %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>	
+    </div>
+<% }; %>
+
+<% const date = new Date(); %>
+<footer> 
+    <a href="mailto:cardapp77@gmail.com" class="social-link" target="_blank">
+        <i class="fas fa-paper-plane"></i>
+    </a>
+    <a href="http://www.linkedin.com/in/nicholas-eveland-7988279a" class="social-link" target="_blank">
+        <i class="fab fa-linkedin-in"></i>
+    </a>
+    <a href="https://github.com/nme077" class="social-link" target="_blank">
+        <i class="fab fa-github"></i>
+    </a>
+    <small id="copyright">&copy; Copyright <%= date.getFullYear() %>, Nicholas Eveland</a></small>
+</footer> 
+
+</div>
+</div>
+<!--Custom JS-->
+<script src="/main.js"></script>
 
 </body>
 </html>

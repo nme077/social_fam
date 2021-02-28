@@ -1,0 +1,52 @@
+<%- include('./partials/header.ejs'); %>
+
+<div class="container w-50">
+    <h1 class="text-center my-3">Register</h1>
+    <form action="/register/<%= token %>" method="POST" class="needs-validation" novalidate>
+        <div class="form-row form-group">
+            <div class="col">
+                <input type="text" class="form-control" id="first-name" name="firstName" required autofocus>   
+                <span class="floating-label">First name</span>      
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" id="last-name" name="lastName" required>
+                <span class="floating-label">Last name</span>
+            </div>
+        </div>
+        <% if(groupName) { %> 
+            <div class="form-group mb-2">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="groupIdLabel">Group</span>
+                    </div>
+                    <label for="staticGroup" class="sr-only">Group Name</label>
+                    <input type="text" readonly class="form-control-plaintext pl-2" id="staticGroup" value="<%= groupName %>">
+                  </div>
+                </div>
+        <% } else { %>
+            <div class="form-group">
+                <input type="text" class="form-control" id="family-name" name="familyName" placeholder="Group name" required>
+            </div>
+        <% } %>
+        <div class="form-group">
+            <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Email address" required>
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-row form-group">
+            <div class="col">
+                <input type="text" class="form-control" id="username" name="username"required>
+                <span class="floating-label">Username</span>
+            </div>
+            <div class="col">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <% if(groupName) { %>
+        <h3>Or <a href="/login/<%= groupId %>/<%= token %>">login</a> and join this group!</h3>
+    <% } %>
+</div>
+
+<%- include('./partials/footer.ejs'); %>

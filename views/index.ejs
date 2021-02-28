@@ -1,5 +1,72 @@
 <%- include('./partials/header.ejs'); %>
 
-<h1>Social Fam</h1>
+<div class="container">
+    <h1><%= groupName %></h1>
+
+    <div class="row justify-content-center">
+    <form class="w-50 needs-validation" action="/posts" method="POST" novalidate>
+        <div class="form-group">
+            <textarea type="text" class="form-control" id="post-text" name="post[text]" placeholder="What do you want to say?" contenteditable="true" style="resize: vertical;"></textarea>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">Add entry</button>
+    </form>
+    </div>
+    
+    <% posts.forEach((post, index) => { %>
+        <div class="border p-3 my-3 post shadow" id="post-<%= index+1 %>">
+            <div class="dropleft float-right">
+              <button class="btn btn-transparent" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-ellipsis-h"></i>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button type="button" class="btn btn-transparent comment-btn dropdown-item">
+                  <i class="fas fa-comment"></i> Comment
+                </button>
+                <% if(post.user.username === currentUser.username) { %>
+                  <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
+                      <button class="btn btn-transparent dropdown-item"><i class="fas fa-trash"></i> Delete post</button>
+                  </form>
+                  <button type="button" class="btn btn-transparent pr-2 edit-post-btn dropdown-item" data-toggle="modal" data-target="#editPostModal" data-whatever="@fat"><i class="fas fa-edit"></i> Edit post</button>
+                <% } %>
+              </div>
+            </div>
+            
+
+            <h3 class="username"><%= post.user.username %></h3>
+            <p class="date-posted text-muted"><%= post.datePosted.toLocaleString() %></p>
+            <p class="text post-<%= index+1 %>-text" id="<%= post._id %>-text"><%= post.text %></p>
+            <p class="btn btn-transparent commentsLabel mb-0">Comments (<span>0</span>)</p>
+            <div class="form-group comment-input text-right" hidden>
+              <input class="form-control" type="text">
+              <button class="btn btn-secondary mt-2 cancel-comment-btn">Cancel</button>
+              <button class="btn btn-primary mt-2 save-comment-btn">Save comment</button>
+            </div>
+        </div>
+    <% }) %>
+    <div class="modal fade" id="editPostModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Edit post</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!--action created from js-->
+              <form action="" method="POST" id="edit-form">
+                <div class="form-group">
+                  <textarea class="form-control" id="message-text" name="post[textNew]"></textarea>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary" id="saveEditedPost">Save post</button>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
 
 <%- include('./partials/footer.ejs'); %>

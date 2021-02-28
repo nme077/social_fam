@@ -1,0 +1,15 @@
+<%- include('./partials/header.ejs'); %>
+
+<div class="container">
+    <h1>Group options</h1>
+    
+    <form action="/settings/group/invite" method="POST">
+     
+            <label for="">Invite a new member to your Fam</label>
+            <input type="text" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" name="email">
+            <small id="emailHelp" class="form-text text-muted">An email will be sent to the address above with instructions on how to set up an account and join your Fam!</small>
+            <button type="submit" class="btn btn-primary">Send email</button>
+    </form>
+</div>
+
+<%- include('./partials/footer.ejs'); %>

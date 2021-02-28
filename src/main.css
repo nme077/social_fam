@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+/* Standard CSS */
+body, html {
+    margin: 0;
+    width: 100vw;
+    min-height: 100vh;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+
+.navbar {
+    background-color: darkseagreen !important;
+}
+
+#logout-btn {
+    background: none;
+    border: none;
+}
+
+.page-container {
+    padding-top: 40px;
+    position: relative;
+    min-height: 94.15vh;
+}
+
+.content-wrap {
+    padding-bottom: 6.2rem; /* height of footer */
+}
+
+input:focus ~ .floating-label,
+input:not(:focus):valid ~ .floating-label{
+  top: 0px;
+  bottom: 10px;
+  left: 20px;
+  font-size: 8px;
+  opacity: 1;
+}
+
+.inputText {
+  font-size: 14px;
+  width: 200px;
+  height: 35px;
+}
+
+.floating-label {
+  position: absolute;
+  pointer-events: none;
+  left: 25px;
+  top: 9px;
+  transition: 0.2s ease all;
+  color: gray;
+}
+
+.commentsLabel {
+    font-size: .75rem;
+}
+
+/**Footer**/
+
+
+footer {
+    z-index: 10;
+    position: absolute;
+    display: block;
+    bottom: 0;
+    width: 100%;
+    height: 6rem; 
+    text-align: center;
+    color: grey;
+    padding-top: 10px;
+}
+
+.alert-container{
+    position: fixed;
+    bottom: 0;
+    z-index: 15;
+    max-width: 100%;
+}
+
+.social-link {
+    color: grey;
+    font-size: 2rem;
+    margin: 1rem;
+}
+
+.social-link:hover {
+    color: black;
+}
+
+#copyright {
+    display: block;
+    width: 100%;
+    margin: 1rem 0 1rem 0;
+}
