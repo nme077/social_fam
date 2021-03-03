@@ -22,5 +22,10 @@ module.exports = {
     ],
   },
   watch: true,
-  mode: 'development'
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 9000,
+  }
+  //mode: 'development'
 };

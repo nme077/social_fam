@@ -8,37 +8,30 @@ const middleware = require('../middleware/index.js');
 // COMMENTS ROUTES
 // ====================
 
-// Render new comment form
-router.get('/new', middleware.isLoggedIn, (req, res) => {
-	Post.findById(req.params.id, (err, foundPost) => {
-		if(err) {
-			console.log(err);
-		} else {
-			res.render('comments/new', {post: foundPost});
-		}
-	})
-});
 // Create new comment
 router.post('/', middleware.isLoggedIn, (req, res) => {
 	Post.findById(req.params.id, (err, post) => {
 		if(err) {
 			console.log(err);
+			req.flash('error', "Somethng went wrong");
 			res.redirect('/posts');
 		} else {
-			Comment.create(req.body.comment, (err, comment) => {
+			Comment.create({text: req.body.comment}, (err, comment) => {
 				if(err) {
+					console.log(err);
 					req.flash('error', "Somethng went wrong");
 					res.redirect('back');
 				} else {
 					// Add user id and name to comment
 					comment.author.id = req.user._id;
 					comment.author.username = req.user.username;
-					comment.save();
-					// Save comment
-					post.comments.push(comment);
-					post.save();
-					req.flash('success', "Comment added");
-					res.redirect('/posts');
+					comment.save().then(() => {
+						// Save comment
+						post.comments.push(comment);
+						post.save();
+						req.flash('success', "Comment added");
+						res.redirect('/posts');
+					});
 				}
 			})
 		}

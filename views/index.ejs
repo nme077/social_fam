@@ -35,11 +35,24 @@
             <h3 class="username"><%= post.user.username %></h3>
             <p class="date-posted text-muted"><%= post.datePosted.toLocaleString() %></p>
             <p class="text post-<%= index+1 %>-text" id="<%= post._id %>-text"><%= post.text %></p>
-            <p class="btn btn-transparent commentsLabel mb-0">Comments (<span>0</span>)</p>
             <div class="form-group comment-input text-right" hidden>
-              <input class="form-control" type="text">
-              <button class="btn btn-secondary mt-2 cancel-comment-btn">Cancel</button>
-              <button class="btn btn-primary mt-2 save-comment-btn">Save comment</button>
+              <form action="/posts/<%= post._id %>/comments" method="POST">
+                <input class="form-control commentInput" type="text" name="comment">
+                <button class="btn btn-secondary mt-2 cancel-comment-btn">Cancel</button>
+                <button class="btn btn-primary mt-2 save-comment-btn">Save comment</button>
+              </form>
+            </div>
+
+            <a class="btn btn-transparent commentsLabel" data-toggle="collapse" href="#comments<%= index+1 %>" role="button" aria-expanded="false" aria-controls="collapseExample">Comments (<span><%= post.comments.length %></span>)</a>
+            <div class="collapse" id="comments<%= index+1 %>">
+              <% post.comments.forEach(comment => { %>
+                <div class="card">
+                  <div class="card-body">
+                    <p class="card-title"><strong><%= comment.author.username %></strong></p>
+                    <p class="card-text" style="font-size: .75rem;"><%= comment.text %></p>
+                  </div>
+                </div>
+              <% }) %>
             </div>
         </div>
     <% }) %>

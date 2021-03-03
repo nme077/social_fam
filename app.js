@@ -61,7 +61,8 @@ app.use((req, res, next) => {
 
 // Coonfig routes
 app.use('/', index);
-app.use('/comments', commentRoutes);
+app.use('/campgrounds/:id/comments', commentRoutes);
+app.use('/posts/:id/comments', commentRoutes);
 
 const port = process.env.PORT || 3000;
 

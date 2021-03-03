@@ -1,9 +1,7 @@
-const middlewareObj = require('../middleware');
-const { isLoggedIn } = require('../middleware');
-
 const Post = require('../models/post'),
       User = require('../models/user'),
       Group = require('../models/group'),
+      Comment = require('../models/comment'),
       express = require('express'),
       passport = require('passport'),
       middleware = require('../middleware'),
@@ -27,7 +25,6 @@ function removeExpiredTokens(group) {
 
 router.use((req, res, next) => {
     ssn = req.session;
-
 
     res.locals.currentUser = req.user;
     res.locals.currentGroup = ssn.currentGroup;
@@ -292,7 +289,7 @@ router.post('/login', passport.authenticate('local', {
 }); 
 
 // Render the page to select a group during login
-router.get('/select_group',isLoggedIn, (req, res) => {
+router.get('/select_group',middleware.isLoggedIn, (req, res) => {
     // If user navigates away, log them out and display 'login canceled'
     Group.find({'_id': { $in: req.user.groups}}, (err, groupArr) => {
         if(err) {
@@ -304,7 +301,7 @@ router.get('/select_group',isLoggedIn, (req, res) => {
 });
 
 // Finish login after selecting group to login to
-router.post('/select_group',isLoggedIn, (req, res) => {
+router.post('/select_group',middleware.isLoggedIn, (req, res) => {
     // Assign the current group to the session
     ssn = req.session;
     // Set the current group for the session
@@ -329,7 +326,7 @@ router.get('/posts', middleware.isLoggedIn, middleware.hasGroup, (req, res) => {
     const ssn = req.session;
     const currentGroup = ssn.currentGroup;
 
-    Post.find({group: currentGroup}, (err, posts) => {
+    Post.find({group: currentGroup}).populate('comments').exec((err, posts) => {
         const sortedPosts = posts.sort((a,b) => { return a.datePosted < b.datePosted ? 1 : -1 });
 
         if(err) {
@@ -344,7 +341,7 @@ router.get('/posts', middleware.isLoggedIn, middleware.hasGroup, (req, res) => {
                 res.render('index', {posts: sortedPosts, groupName: group.name});
             })
         }
-    })
+    });
 });
 
 // Add a new post
