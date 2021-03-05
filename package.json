@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "build": "webpack",
-    "heroku-postbuild": "webpack --prod"
+    "heroku-postbuild": ""
   },
   "engines": {
     "npm": "6.14.6"
