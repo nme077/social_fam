@@ -7,8 +7,14 @@ const Post = require('../models/post'),
       middleware = require('../middleware'),
       router = express.Router(),
       nodemailer = require('nodemailer'),
+      { google } = require('googleapis'),
       async = require('async'),
       crypto = require('crypto');
+
+// CONFIRGURE EMAIL
+const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI);
+
+oAuth2Client.setCredentials({refresh_token: process.env.REFRESH_TOKEN});
 
 let groupIdToRegister = '';
 
@@ -460,11 +466,17 @@ router.post('/settings/group/invite', middleware.isLoggedIn, (req, res, next) =>
             })
         },
         function(token, group, done) {
+            const accessToken = oAuth2Client.getAccessToken();
+
             const smtpTransport = nodemailer.createTransport({
                 service: 'Gmail',
                 auth: {
+                    type: 'OAuth2',
                     user: 'cardapp77@gmail.com',
-                    pass: process.env.GMAILPW
+                    clientId: process.env.CLIENT_ID,
+                    clientSecret: process.env.CLIENT_SECRET,
+                    refreshToken: process.env.REFRESH_TOKEN,
+                    accessToken: accessToken
                 }
             });
             const mailOptions = {
