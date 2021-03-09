@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bowlby+One+SC&display=swap');
+
+
+
+:root {
+    --page-background: #F8F9FA;
+    --logo-font-color: #FFC04E;
+    --logo-bg-color: #046C8C;
+    --other-font-color: #7EE4FB;
+    --other-font-color-hover: #d9f3f9;
+}
+
+// Custom bootstrap
+$theme-colors: (
+  "primary": #046C8C
+);
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+// End custom bootstrap
+
+/* Standard CSS */
+body, html {
+    margin: 0;
+    width: 100vw;
+    min-height: 100vh;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--page-background);
+}
+
+#loginTitle {
+    font-size: 3em;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #333;
+    background-image: linear-gradient(to right, var(--page-background), rgb(70, 70, 70), var(--page-background));
+    overflow: visible;
+    text-align: center;
+    height: 1px;
+}
+
+hr:after {
+    background: var(--page-background);
+    content: 'or';
+    padding: 0 4px;
+    position: relative;
+    top: -13px;
+}
+
+.appLogo {
+    font-family: 'Bowlby One SC', cursive;
+    color: var(--logo-font-color) !important;
+}
+
+.navbar {
+    background-color: var(--logo-bg-color) !important;
+}
+
+.nav-link {
+    color: var(--other-font-color) !important;
+}
+
+.nav-link:hover {
+    color: var(--other-font-color-hover) !important;
+}
+
+#logout-btn {
+    background: none;
+    border: none;
+}
+
+.page-container {
+    padding-top: 40px;
+    position: relative;
+    min-height: 94.15vh;
+}
+
+.content-wrap {
+    padding-bottom: 6.2rem; /* height of footer */
+}
+
+.wave-side {
+    border: green solid;
+    width: 20%;
+    height: 1000px;
+  }
+  
+  .svg-wave {
+    width: 100%;
+    height: 100%;
+  }
+
+.commentsLabel {
+    font-size: .75rem;
+}
+
+/**Footer**/
+
+
+footer {
+    z-index: 10;
+    position: absolute;
+    display: block;
+    bottom: 0;
+    width: 100%;
+    height: 6rem; 
+    text-align: center;
+    color: grey;
+    padding-top: 10px;
+}
+
+.alert-container{
+    position: fixed;
+    bottom: 0;
+    z-index: 15;
+    max-width: 100%;
+}
+
+.social-link {
+    color: grey;
+    font-size: 2rem;
+    margin: 1rem;
+}
+
+.social-link:hover {
+    color: black;
+}
+
+#copyright {
+    display: block;
+    width: 100%;
+    margin: 1rem 0 1rem 0;
+}
