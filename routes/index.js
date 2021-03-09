@@ -384,14 +384,22 @@ router.put('/posts/:id', (req, res) => {
     });
 });
 
+// Delete one post
 router.delete('/posts/:id', middleware.isLoggedIn, (req, res) => {
     Post.findByIdAndDelete(req.params.id, (err, postDeleted) => {
         if(err) {
             req.flash('error', 'Sonething went wrong, try again.');
             res.redirect('back');
         } else {
-            req.flash('success', 'Post deleted!');
-            res.redirect('/posts');
+            Comment.deleteMany({_id: { $in: postDeleted.comments}}, (err) => {
+                if(err) {
+                    req.flash('error', 'Sonething went wrong, try again.');
+                    res.redirect('back');
+                } else {
+                    req.flash('success', 'Post deleted!');
+                    res.redirect('/posts');
+                }
+            });
         }
     })
 });

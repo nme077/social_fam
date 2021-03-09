@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-require('./main.css');
+import './main.scss'
 const $ = require('jquery');
 import 'bootstrap';
 import 'popper.js';

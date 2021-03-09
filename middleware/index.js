@@ -1,3 +1,5 @@
+var Comment = require('../models/comment');
+
 const middlewareObj = {};
 
 // Logged in middleware
