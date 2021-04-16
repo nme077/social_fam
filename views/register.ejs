@@ -1,7 +1,7 @@
 <%- include('./partials/header.ejs'); %>
 
 <div class="container w-50">
-    <h1 class="text-center mb-5" id="loginTitle"><strong>Register for <%= appName %></strong></h1>
+    <h1 class="text-center mb-5" id="loginTitle"><strong>Join <%= appName %></strong></h1>
     <form action="/register/<%= token %>" method="POST" class="needs-validation" novalidate>
         <div class="form-row form-group">
             <div class="col">
@@ -15,9 +15,9 @@
             <div class="form-group mb-2">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                      <span class="input-group-text" id="groupIdLabel">Group</span>
+                      <span class="input-group-text" id="groupIdLabel">Fam</span>
                     </div>
-                    <label for="staticGroup" class="sr-only">Group Name</label>
+                    <label for="staticGroup" class="sr-only">Fam Name</label>
                     <input type="text" readonly class="form-control-plaintext pl-2" id="staticGroup" value="<%= groupName %>">
                   </div>
                 </div>
@@ -38,13 +38,18 @@
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary btn-block">Submit</button>
     </form>
 
     <% if(groupName) { %>
-        <h3>Or <a href="/login/<%= groupId %>/<%= token %>">login</a> and join this group!</h3>
+        <div class="my-4">
+            <hr class="hr-text or" data-content="OR">
+            <div class="text-center">
+                <p><a href="/login/<%= groupId %>/<%= token %>">Login</a> and join this Fam!</p>
+            </div>
+        </div>
     <% } else { %>
-        <hr class="hr-text" data-content="OR">
+        <hr class="hr-text or" data-content="OR">
         <div class="text-center">
             <a href="/login" id="register-btn">Login</a>
         </div>

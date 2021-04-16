@@ -1,24 +1,33 @@
-import comment from '../models/comment';
-
 const $ = require('jquery');
 const axios = require('axios');
 
 export default function home() {
     if(window.location.pathname === '/posts') {
         // Add active class to page button in header
-        $('#home-btn').addClass('active');
+        $('.home-btn').addClass('active');
+        
+        // Handle file upload button
+        $(".upload-button").on('click', function() {
+            $(".file-upload").trigger('click');
+         });
+
+         // Handle post text submission
+         $('#submitPostText').on('click', (e) => {
+            e.preventDefault();
+            $('.postFormContainer').trigger('submit');
+         });
 
         // ID to use when submitting update form
         let typeOfForm = '';
         let postId = '';
         let commentId = '';
         
-        // Initialize height
-        document.querySelector('textarea').style.height = '38px';
-
-        $('textarea').on('keydown', () => {
-            document.querySelector('textarea').style.height = '38px';
-        })
+        // Update character count on input field
+        $('#postText').on('input', (e) => {
+            const charCount = $('#postText').val().length;
+            
+            $('#curCharCount').text(charCount)
+        });
 
         const editPostBtn = document.querySelectorAll('.edit-post-btn');
         const editCommentBtn = document.querySelectorAll('.edit-comment-btn');
@@ -74,8 +83,18 @@ export default function home() {
                 }
             })
         }
-        
 
+        styleCommentsBtn();
+        
+        function styleCommentsBtn() {
+            const numOfCommentsArr = document.querySelectorAll('.numOfComments');
+
+            numOfCommentsArr.forEach(num => {
+                if(num.innerHTML === '0') {
+                    num.parentElement.classList.add('disabled')
+                }
+            });
+        }
 
         function updatePost() {
             const saveDialog = document.querySelector('#save-success');
@@ -95,7 +114,7 @@ export default function home() {
                 // Show save success message
                 location.reload();
                 if(!saveDialog) {
-                    $(`<div class="container alert-container">
+                    $(`<div class="col-12 fixed-bottom">
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             Post Saved!
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -108,7 +127,7 @@ export default function home() {
             }).catch((res) => {
                 // Show error message
                 if(!saveDialog) {
-                    $(`<div class="container alert-container">
+                    $(`<div class="col-12 fixed-bottom">
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             Error, please try again
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -139,7 +158,7 @@ export default function home() {
                 // Show save success message
                 location.reload();
                 if(!saveDialog) {
-                    $(`<div class="container alert-container">
+                    $(`<div class="col-12 fixed-bottom">
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             Comment Saved!
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -152,7 +171,7 @@ export default function home() {
             }).catch((res) => {
                 // Show error message
                 if(!saveDialog) {
-                    $(`<div class="container alert-container">
+                    $(`<div class="col-12 fixed-bottom">
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             Error, please try again
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -186,5 +205,27 @@ export default function home() {
 
             $el.attr('hidden', true);
         });
+
+        // Photo upload preview
+        const photoUpload = document.querySelector('#photoUpload');
+
+        photoUpload.onchange = (e) => {
+            readURL(e.target);
+        }
+
+        function readURL(input) {
+            console.log(input.files)
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+          
+                reader.onload = function (e) {
+                    $('.image-preview').removeClass('d-none');
+                    $('#photoPreview').attr('src', e.target.result);
+                };
+
+          
+                reader.readAsDataURL(input.files[0]);
+            }
+          }
     }
 }

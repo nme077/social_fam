@@ -15,9 +15,9 @@
                         <div class="form-group mb-2">
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                <span class="input-group-text" id="groupIdLabel">Group</span>
+                                <span class="input-group-text" id="groupIdLabel">Fam</span>
                                 </div>
-                                <label for="staticGroup" class="sr-only">Group Name</label>
+                                <label for="staticGroup" class="sr-only">Fam Name</label>
                                 <input type="text" readonly class="form-control-plaintext pl-2" id="staticGroup" value="<%= groupName %>">
                             </div>
                             </div>
@@ -29,10 +29,26 @@
                         <input type="password" class="form-control" id="password" name="password" placeholder="Password">
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Log in</button>
-                    <hr class="hr-text" data-content="OR">
-                    <div class="text-center">
-                        <a href="/register" id="register-btn">Register</a>
+                    <div class="my-4">
+                        <hr class="hr-text or" data-content="OR">
                     </div>
+                    <% if(groupName) { %>
+                        <div class="text-center">
+                            <p><a href="javascript:history.back()">Create a new account</a> and join this Fam</p>
+                        </div>
+
+                        <div class="my-4">
+                            <hr class="hr-text or" data-content="OR">
+                        </div>
+
+                        <div class="text-center">
+                            <p><a href="/login" id="register-btn">Login</a> <strong>without</strong> joining this Fam</p>
+                        </div>
+                    <% } else { %>
+                        <div class="text-center">
+                            <a href="/register" id="register-btn">Create a new account</a>
+                        </div>
+                    <% } %>
                 </form>
             </div>
         </div>

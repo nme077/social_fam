@@ -10,30 +10,39 @@
 </head>
 <body style="visibility: hidden;" onload="document.body.style.visibility='visible'">
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <a class="navbar-brand appLogo" href="#"><%= appName %></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+        <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+        
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
+          <ul class="navbar-nav d-lg-none">
             <% if(path !== '/select_group' && currentGroup) { %>
               <li class="nav-item">
-                <a class="nav-link" href="/posts" id="home-btn">Home<span class="sr-only">(current)</span></a>
+                <a class="nav-link home-btn" href="/posts">Home<span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/settings/group" id="group-settings-btn">Group settings</a>
+                <a class="nav-link group-settings-btn" href="/settings/group">Group settings</a>
               </li>
               <li class="nav-item">
                 <form action="/logout" method="POST">
-                  <button class="nav-link" type="submit" id="logout-btn">Logout</button>
+                  <button class="nav-link logout-btn" type="submit">Logout</button>
                 </form>
               </li>
             <% } %>
           </ul>
         </div>
+        
         <% if(typeof groupName !== 'undefined') { %>
           <h2 class="navbar-brand"><%= groupName %></h2>
+        <% } %>
+        
+        <% if(typeof groupName !== 'undefined') { %>
+          <div class="w-100 text-right">
+            <a class="navbar-brand"><%= groupName %></a>
+          </div>
         <% } %>
       </nav>
 

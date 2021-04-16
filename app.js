@@ -12,17 +12,21 @@ const express = require("express"),
       passportLocalMongoose = require('passport-local-mongoose'),
       Post = require('./models/post'),
       User = require('./models/user'),
+      Photo = require('./models/photo'),
       path = require('path');
 
 // Initialize express
 const app = express();
 
 // CONNECT TO MONGODB
-mongoose.connect(process.env.URI, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
+mongoose.connect(process.env.URI, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true});
 
 // Router routes
 const index = require('./routes/index');
 const commentRoutes = require('./routes/comments');
+const postsRoutes = require('./routes/posts');
+const settingsRoutes = require('./routes/settings');
+const mediaRoutes = require('./routes/photos');
 
 // App config
 app.use(flash());
@@ -30,7 +34,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/views'));
 app.use(express.static(path.join(__dirname,'/src')));
 app.use(express.static(path.join(__dirname,'/dist')));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 
 // Setup passport
@@ -56,13 +60,20 @@ app.use((req, res, next) => {
 	res.locals.successMessage = req.flash('success');
     res.locals.path = req.path;
     res.locals.appName = 'FamSocial';
+    res.locals.currentUser = req.user;
     next();
 });
 
-// Coonfig routes
+// Config routes
+app.use('/', postsRoutes);
+app.use('/', settingsRoutes);
 app.use('/', index);
-app.use('/campgrounds/:id/comments', commentRoutes);
+app.use('/', mediaRoutes)
 app.use('/posts/:id/comments', commentRoutes);
+
+app.get('*', (req, res) => {
+    res.redirect('/');
+});
 
 const port = process.env.PORT || 3000;
 

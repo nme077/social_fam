@@ -1,15 +1,110 @@
 <%- include('./partials/header.ejs'); %>
+<div class="container-fluid">
+    <div class="row">
+      <%- include('./partials/sidebar.ejs'); %>
+      <div class="col-lg-8 col-sm-12">
+        <h1>Profile options</h1>
+        <hr>
 
-<div class="container">
-    <h1>Group options</h1>
-    
-    <form action="/settings/group/invite" method="POST">
-     
-            <label for="">Invite a new member to your Fam</label>
-            <input type="text" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" name="email">
-            <small id="emailHelp" class="form-text text-muted">An email will be sent to the address above with instructions on how to set up an account and join your Fam!</small>
-            <button type="submit" class="btn btn-primary">Send email</button>
+        <!--Profile picture-->
+        <div class="row mb-3">
+          <div class="col-12">
+            <div class="d-inline-block" id="profilePhotoContainer">
+              <% if(profilePhoto) { %>
+              <div class="profilePhotoOptions d-none">
+                <form action="/photo/profile/<%= profilePhoto.id%>?_method=DELETE" method="POST" id="deleteProfilePhotoForm">
+                  <button class="btn btn-transparent" id="deleteProfilePhoto"><i class="far fa-trash-alt"></i></button>
+                </form>
+              </div>
+              <% } %>
+              <div class="circle">
+                <% if(profilePhoto) { %>
+                <img src="<%= profilePhoto.url %>" class="h-100" id="profilePicture" alt="profile picture">
+                <% } else { %>
+                <div class="profilePhotoPlaceholder">
+                  <i class="fas fa-user"></i>
+                </div>
+                <% } %>
+              </div>
+              <form action="/photo/upload/profile" method="POST" enctype="multipart/form-data" class="p-placeholder" id="photoUploadForm">
+                <i class="fa fa-camera upload-button"></i>
+                <input class="file-upload" id="photoUpload" name="photoUpload" type="file" accept="image/*" />
+              </form>
+            </div>
+          </div>
+        </div>
+        <!--End profile picture-->
+
+        <div class="row">
+          <div class="col-12">
+            <label class="text-muted" for="fullNameDisplay">Name</label>
+            <p class="userInfoText pl-3" id="fullNameDisplay"><%= currentUser.firstName %> <%= currentUser.lastName %> <span class="btn btn-transparent editIcon d-inline d-lg-none" id="editNameBtn" data-toggle="collapse" data-target="#nameForm"><i class="fas fa-pencil-alt"></i></span></p>
+
+            <form action="/user/<%= currentUser._id %>/fullname?_method=PUT" method="POST" class="editForm collapse" id="nameForm">
+              <div class="form-row form-group">
+                <div class="col-sm-12 col-md-5">
+                    <input type="text" class="form-control" id="first-name" name="firstName" placeholder="First name" required>    
+                </div>
+                <div class="col-sm-12 col-md-5">
+                    <input type="text" class="form-control" id="last-name" name="lastName" placeholder="Last name" required>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                  <button type="submit" class="btn btn-primary btn-block">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <label class="text-muted" for="emailDisplay">Email address</label>
+            <p class="userInfoText pl-3" id="emailDisplay"><%= currentUser.email %> <span class="btn btn-transparent editIcon d-inline d-lg-none" id="editEmailBtn" data-toggle="collapse" data-target="#emailForm"><i class="fas fa-pencil-alt"></i></span></p>
+          
+            <form action="/user/<%= currentUser._id %>/email?_method=PUT" method="POST" class="editForm collapse" id="emailForm">
+              <div class="form-row form-group">
+                <div class="col-sm-12 col-md-5">
+                  <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Email address" required>
+                </div>
+                <div class="col-sm-12 col-md-2">
+                  <button type="submit" class="btn btn-primary btn-block">Save changes</button>
+                </div>
+              </div>
+            </form>
+          </div> 
+        </div>
+    <hr>
+    <!--Password change form-->
+    <form action="/reset" method="POST" id="passwordChangeForm" class="col-12">
+      <h3>Change password</h3>
+      <div class="form-row form-group">
+        <div class="col-sm-12 col-md-4">
+            <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="New password" required>
+        </div>
+        <div class="col-sm-12 col-md-4">
+          <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+        </div>
+        <div class="col-sm-12 col-md-4">
+          <button type="submit" class="btn btn-primary" id="passwordChangeSubmit">Change password</button>
+        </div>
+      </div>
     </form>
+    <hr>
+        <form action="/settings/group/invite" method="POST" class="col-12" id="inviteMemberEmail">
+          <h3>Invite a new member to your Fam</h3>
+          <div class="form-row form-group">
+            <div class="col-sm-12 col-md-8">
+              <input type="text" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" name="email" required>
+            </div>
+            <div class="col-sm-12 col-md-4">
+              <button type="submit" class="btn btn-primary" id="sendInvite">Send email</button>
+            </div>
+            <div class="col-12">
+              <small id="emailHelp" class="form-text text-muted">An email will be sent to the address above with instructions on how to set up an account and join your Fam!</small>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>  
 </div>
 
 <%- include('./partials/footer.ejs'); %>

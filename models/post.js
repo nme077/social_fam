@@ -2,13 +2,8 @@ const mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
     user: {
-        id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        },
-        username: String,
-        firstName: String,
-        lastName: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     },
     datePosted: Date,
     text: String,
@@ -21,7 +16,15 @@ const postSchema = new mongoose.Schema({
     group: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Group'
-        }
+        },
+    profilePhoto: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Image'
+    },
+    photo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Image'
+    }
 });
 
 

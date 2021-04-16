@@ -23,8 +23,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
 					res.redirect('back');
 				} else {
 					// Add user id and name to comment
-					comment.author.id = req.user._id;
-					comment.author.username = req.user.username;
+					comment.author = req.user._id;
 					comment.save().then(() => {
 						// Save comment
 						post.comments.push(comment);

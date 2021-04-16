@@ -1,88 +1,134 @@
 <%- include('./partials/header.ejs'); %>
+<div class="container-fluid">
+  <div class="row">
 
-<div class="container">
-    <!--Add post form-->
-    <div class="row justify-content-center">
-    <form class="w-50 needs-validation" action="/posts" method="POST" novalidate>
-        <div class="form-group">
-            <textarea type="text" class="form-control" id="post-text" name="post[text]" placeholder="What do you want to say?" contenteditable="true" style="resize: vertical;" required></textarea>
-        </div>
-        <button class="btn btn-primary btn-block" type="submit">Add entry</button>
-    </form>
-    </div>
-    <!--End add post form-->
-    
-    <% posts.forEach((post, index) => { %>
-        <!--Post container-->
-        <div class="border p-3 my-3 post shadow" id="post-<%= index+1 %>">
-          <!--Post option menu-->
-            <div class="dropleft float-right">
-              <button class="btn btn-transparent" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-ellipsis-h"></i>
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <button type="button" class="btn btn-transparent comment-btn dropdown-item">
-                  <i class="fas fa-comment"></i> Comment
-                </button>
-                <% if(post.user.username === currentUser.username) { %>
-                  <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
-                      <button class="btn btn-transparent dropdown-item"><i class="fas fa-trash"></i> Delete post</button>
-                  </form>
-                  <button type="button" class="btn btn-transparent pr-2 edit-post-btn dropdown-item" data-toggle="modal" data-target="#editPostModal" data-whatever="@fat"><i class="fas fa-edit"></i> Edit post</button>
-                <% } %>
+    <%- include('./partials/sidebar.ejs'); %>
+    <div class="col-lg-8 col-sm-12 justify-content-center d-flex">
+      <div class="postContainer w-100">
+        <!--Add post form-->
+        <div class="mb-5">
+          <div class="image-preview text-center d-none">
+            <div class="img-container p-3">
+              <img class="img-thumbnail img-fluid" id="photoPreview" src="" alt="image upload preview">
+            </div>
+          </div>
+          
+          <div>
+            <form action="/posts" method="POST" enctype="multipart/form-data" class="form-group d-flex postFormContainer">
+              <div class="uploadPhotoForm col-2 col-md-1 px-0">
+                <i class="fa fa-camera upload-button"></i>
+                <input class="file-upload" id="photoUpload" name="photoUpload" type="file" accept="image/*"/>
               </div>
-            </div>
-            <!--End post options-->
-            <!--Post-->
-            <h3 class="username"><%= post.user.username %></h3>
-            <p class="date-posted text-muted"><%= post.datePosted.toLocaleString() %></p>
-            <p class="text post-<%= index+1 %>-text" id="<%= post._id %>-text"><%= post.text %></p>
-            <!--End post-->
-
-            <!--Button to show comments on post-->
-            <a class="btn btn-transparent commentsLabel" data-toggle="collapse" href="#comments<%= index+1 %>" role="button" aria-expanded="false" aria-controls="collapseExample">Comments (<span><%= post.comments.length %></span>)</a>
-
-            <!--Comment input-->
-            <div class="form-group comment-input text-right" hidden>
-              <form action="/posts/<%= post._id %>/comments" method="POST">
-                <input class="form-control commentInput" type="text" name="comment">
-                <button class="btn btn-secondary mt-2 cancel-comment-btn" type="button">Cancel</button>
-                <button class="btn btn-primary mt-2 save-comment-btn" type="submit">Save comment</button>
-              </form>
-            </div>
-            <!--End comment input-->
-
-            <!--End button to show comments on post-->
-            <div class="collapse" id="comments<%= index+1 %>">
-              <% post.comments.forEach(comment => { %>
-                <div class="card" id="comment-<%= index+1 %>">
-                  <div class="card-body">
-                    <!--Post options-->
-                    <% if(comment.author.username === currentUser.username) { %>
-                      <div class="dropleft float-right">
-                        <button class="btn btn-transparent" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          <i class="fas fa-ellipsis-h"></i>
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                           <button type="button" class="btn btn-transparent pr-2 edit-comment-btn dropdown-item" id="<%= comment._id %>-edit" data-toggle="modal" data-target="#editPostModal" data-whatever="@fat"><i class="fas fa-edit"></i> Edit comment</button>
-                          <form action="/posts/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST" class="float-right">
-                            <button class="btn btn-transparent dropdown-item"><i class="fas fa-trash"></i> Delete comment</button>
-                          </form>
-                        </div>
-                      </div>
+              <div id="postTextForm" class="col-10 col-md-11 px-0">
+                <textarea maxlength="500" type="text" class="form-control" id="postText" name="postText" placeholder="What do you want to say?" contenteditable="true" style="resize: vertical;" required></textarea>
+                <p class="charCount"><span id="curCharCount">0</span>/500</p>
+              </div>
+            </form>
+            <button class="btn btn-primary btn-block" type="submit" id="submitPostText">Add entry</button>
+          </div>
+        </div>
+      <!--End add post form-->
+    
+        <% posts.forEach((post, index) => { %>
+            <!--Post container-->
+            <div class="border p-3 my-3 col-12 post shadow rounded" id="post-<%= index+1 %>">
+              <!--Post option menu-->
+                <div class="dropleft float-right">
+                  <button class="btn btn-transparent" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-h"></i>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <button type="button" class="btn btn-transparent comment-btn dropdown-item">
+                      <i class="fas fa-comment"></i> Comment
+                    </button>
+                    <% if(post.user.username === currentUser.username) { %>
+                      <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
+                          <button class="btn btn-transparent dropdown-item"><i class="fas fa-trash"></i> Delete post</button>
+                      </form>
+                      <button type="button" class="btn btn-transparent pr-2 edit-post-btn dropdown-item" data-toggle="modal" data-target="#editPostModal" data-whatever="@fat"><i class="fas fa-edit"></i> Edit post</button>
                     <% } %>
-                    <!--End post options-->
-                    <!--Comment body-->
-                    <p class="card-title"><strong><%= comment.author.username %></strong></p>
-                    <p class="card-text comment" style="font-size: .75rem;" id="<%= comment._id %>-text"><%= comment.text %></p>
-                    <!--End comment body-->
                   </div>
                 </div>
-              <% }) %>
+                <!--End post options-->
+                <!--Post-->
+                <!--Profile picture-->
+                <div class="row mb-3">
+                  <div class="col-12 d-flex postHeading">
+                    <div class="postCircle mr-2">
+                      <% if(post.user.profilePhoto) { %>
+                        <img src="<%= post.user.profilePhoto ? post.user.profilePhoto.url : '' %>" class="h-100" id="profilePicture" alt="profile picture">
+                      <% } else { %>
+                        <div class="profilePhotoPlaceholderPost">
+                          <i class="fas fa-user"></i>
+                        </div>
+                      <% } %>
+                    </div>
+                    <h3 class="username"><%= post.user.firstName ? post.user.firstName : post.user.username %></h3>
+                  </div>
+                </div>
+                <!--End profile picture-->
+                <!--Post body-->
+                <% if(post.photo) { %>
+                  <div class="postPhotoContainer row justify-content-center">
+                    <div class="img-container p-3 col-md-6 col-sm-12">
+                      <img class="img-thumbnail img-fluid" id="postPhoto" src="<%= post.photo.url %>" alt="Picture">
+                    </div>
+                  </div>
+                <% } %>
+                <% post.datePosted %>
+                <p class="date-posted text-muted"><%= post.datePosted.toLocaleString() %></p>
+                <p class="text post-<%= index+1 %>-text" id="<%= post._id %>-text"><%= post.text %></p>
+                <!--End post-->
+
+                <!--Button to show comments on post-->
+                <div class="actionsContainer">
+                  <a class="btn btn-transparent commentsLabel" data-toggle="collapse" href="#comments<%= index+1 %>" role="button" aria-expanded="false" aria-controls="collapseExample">Comments (<span class="numOfComments"><%= post.comments.length %></span>)</a>
+                  <a class="btn btn-transparent commentsLabel" href="#comments<%= index+1 %>" role="button"><i class="far fa-hand-rock" style="transform: rotate(180deg);"></i></a>
+                </div>
+
+                <!--Comment input-->
+                <div class="form-group comment-input text-right" hidden>
+                  <form action="/posts/<%= post._id %>/comments" method="POST">
+                    <input class="form-control commentInput" type="text" name="comment">
+                    <button class="btn btn-secondary mt-2 cancel-comment-btn" type="button">Cancel</button>
+                    <button class="btn btn-primary mt-2 save-comment-btn" type="submit">Save comment</button>
+                  </form>
+                </div>
+                <!--End comment input-->
+
+                <!--End button to show comments on post-->
+                <div class="collapse" id="comments<%= index+1 %>">
+                  <% post.comments.forEach(comment => { %>
+                    <div class="card" id="comment-<%= index+1 %>">
+                      <div class="card-body">
+                        <!--Post options-->
+                        <% if(comment.author.username === currentUser.username) { %>
+                          <div class="dropleft float-right">
+                            <button class="btn btn-transparent" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <button type="button" class="btn btn-transparent pr-2 edit-comment-btn dropdown-item" id="<%= comment._id %>-edit" data-toggle="modal" data-target="#editPostModal" data-whatever="@fat"><i class="fas fa-edit"></i> Edit comment</button>
+                              <form action="/posts/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST" class="float-right">
+                                <button class="btn btn-transparent dropdown-item"><i class="fas fa-trash"></i> Delete comment</button>
+                              </form>
+                            </div>
+                          </div>
+                        <% } %>
+                        <!--End post options-->
+                        <!--Comment body-->
+                        <p class="card-title"><strong><%= comment.author.firstName %></strong></p>
+                        <p class="card-text comment" style="font-size: .75rem;" id="<%= comment._id %>-text"><%= comment.text %></p>
+                        <!--End comment body-->
+                      </div>
+                    </div>
+                  <% }) %>
+                </div>
             </div>
-        </div>
-        <!--End post container-->
-    <% }) %>
+            <!--End post container-->
+        <% }) %>
+      </div>
+    </div>
     <!--Modal for editing posts and comments-->
     <div class="modal fade" id="editPostModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">

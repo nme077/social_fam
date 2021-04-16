@@ -20,7 +20,11 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Group'
         }
-    ]
+    ],
+    profilePhoto: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Image'
+    }
 });
 
 userSchema.plugin(passportLocalMongoose);
