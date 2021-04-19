@@ -3,6 +3,7 @@ const User = require('../models/user'),
       Group = require('../models/group'),
       Comment = require('../models/comment'),
       Photo = require('../models/photo'),
+      Like = require('../models/like'),
       express = require('express'),
       middleware = require('../middleware'),
       router = express.Router(),
@@ -28,15 +29,13 @@ const upload = multer({
     limits: limits,
     storage: multer.diskStorage({})
 });
-// for parsing multipart/form-data
-//router.use(upload.array());
 
 // Render all posts
 router.get('/posts', middleware.isLoggedIn, middleware.hasGroup, (req, res) => {
     const ssn = req.session;
     const currentGroup = ssn.currentGroup;
 
-    Post.find({group: currentGroup}).populate({path: 'user', populate: {path: 'profilePhoto'}}).populate({path: 'comments', populate: {path: 'author'}}).populate('photo').exec((err, posts) => {
+    Post.find({group: currentGroup}).populate({path: 'user', populate: {path: 'profilePhoto'}}).populate({path: 'likes', populate: {path: 'author'}}),populate({path: 'comments', populate: {path: 'author'}}).populate('photo').exec((err, posts) => {
         if(err) {
             req.flash('error', 'Something went wrong, try again.');
             res.redirect('back');
@@ -186,5 +185,29 @@ function deletePhoto(req,res,publicId) {
         }
      });
 }
+
+// Add fist bump to a post
+router.post('/posts/:id/addFistBump', (req, res) => {
+
+    Post.findById(req.params.id, (err, post) => {
+        if(err) {
+            req.flash('error', 'Something went wrong');
+            res.redirect('back');
+        } else {
+            Like.create({author = req.user._id}, (err, like) => {
+                if(err) {
+                    req.flash('error', 'Something went wrong');
+                    res.redirect('back');
+                } else {
+                    post.likes.push(like);
+                    post.save().then(() => {
+                        req.flash('success', 'Post saved');
+                        res.redirect('back');
+                    });
+                }
+            })
+        }
+    });
+});
 
 module.exports = router;

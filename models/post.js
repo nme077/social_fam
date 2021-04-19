@@ -13,6 +13,12 @@ const postSchema = new mongoose.Schema({
 			ref: 'Comment'
 		}
     ],
+    likes: [
+        {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Like'
+		}
+    ],
     group: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Group'
