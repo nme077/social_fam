@@ -63,7 +63,9 @@
                         </div>
                       <% } %>
                     </div>
-                    <h3 class="username"><%= post.user.firstName ? post.user.firstName : post.user.username %></h3>
+                    <a href="/user/<%= post.user._id %>">
+                      <h3 class="username"><%= post.user.firstName ? post.user.firstName : post.user.username %></h3>
+                    </a>
                   </div>
                 </div>
                 <!--End profile picture-->
@@ -71,7 +73,7 @@
                 <% if(post.photo) { %>
                   <div class="postPhotoContainer row justify-content-center">
                     <div class="img-container p-3 col-md-6 col-sm-12">
-                      <img class="img-thumbnail img-fluid" id="postPhoto" src="<%= post.photo.url %>" alt="Picture">
+                      <img class="img-thumbnail img-fluid postPhoto" src="<%= post.photo.url %>" alt="Picture">
                     </div>
                   </div>
                 <% } %>
@@ -82,10 +84,12 @@
 
                 <!--Button to show comments on post-->
                 <div class="actionsContainer">
-                  <a class="btn btn-transparent commentsLabel" data-toggle="collapse" href="#comments<%= index+1 %>" role="button" aria-expanded="false" aria-controls="collapseExample">Comments (<span class="numOfComments"><%= post.comments.length %></span>)</a>
+
                   <form class="d-inline" action="/posts/<%= post._id %>/addFistBump" method="POST">
-                    <button class="btn btn-transparent commentsLabel"><i class="fas fa-fist-raised"></i> <span class="likeCount"><%= post.likes.length %></span></button>
+                    <button class="btn btn-transparent commentsLabel"><i class="fas fa-fist-raised fistBumpIcon"></i> <span class="likeCount"><%= post.likes.length > 0 ? post.likes.length : '' %></span></button>
                   </form>
+
+                  <a class="btn btn-transparent commentsLabel" data-toggle="collapse" href="#comments<%= index+1 %>" role="button" aria-expanded="false" aria-controls="collapseExample">Comments (<span class="numOfComments"><%= post.comments.length %></span>)</a>
                 </div>
 
                 <!--Comment input-->

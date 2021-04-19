@@ -142,8 +142,9 @@ router.post('/settings/group/invite', middleware.isLoggedIn, (req, res, next) =>
     });
 });
 
+
 sendTestEmail();
-setInterval(sendTestEmail, 86400000); // Send test email every 24 hours to keep credentials active
+setInterval(sendTestEmail, 43200000); // Send test email every 12 hours to keep credentials active
 // Send email to check status of gmail server
 function sendTestEmail() {
     async.waterfall([

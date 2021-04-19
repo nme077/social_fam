@@ -35,7 +35,7 @@ router.get('/posts', middleware.isLoggedIn, middleware.hasGroup, (req, res) => {
     const ssn = req.session;
     const currentGroup = ssn.currentGroup;
 
-    Post.find({group: currentGroup}).populate({path: 'user', populate: {path: 'profilePhoto'}}).populate({path: 'likes', populate: {path: 'author'}}),populate({path: 'comments', populate: {path: 'author'}}).populate('photo').exec((err, posts) => {
+    Post.find({group: currentGroup}).populate({path: 'user', populate: {path: 'profilePhoto'}}).populate({path: 'likes', populate: {path: 'author'}}).populate({path: 'comments', populate: {path: 'author'}}).populate('photo').exec((err, posts) => {
         if(err) {
             req.flash('error', 'Something went wrong, try again.');
             res.redirect('back');
@@ -149,27 +149,34 @@ router.delete('/posts/:id', middleware.isLoggedIn, (req, res) => {
                     req.flash('error', 'Error deleting comments on post, try again!');
                     res.redirect('back');
                 } else {
-                    if(postDeleted.photo) {
-                        Photo.findByIdAndDelete(postDeleted.photo._id, (err, deletedPhoto) => {
-                            if(err) {
-                                req.flash('error', 'Error deleting photo in post, try again!');
-                                res.redirect('back');
+                    Like.deleteMany({_id: { $in: postDeleted.likes}}, (err) => {
+                        if(err) {
+                            req.flash('error', 'Error deleting likes on post, try again!');
+                            res.redirect('back');
+                        } else {
+                            if(postDeleted.photo) {
+                                Photo.findByIdAndDelete(postDeleted.photo._id, (err, deletedPhoto) => {
+                                    if(err) {
+                                        req.flash('error', 'Error deleting photo in post, try again!');
+                                        res.redirect('back');
+                                    } else {
+                                        // 3. Delete the photo from cloudinary
+                                        if(postDeleted.user._id.equals(req.user._id)) {
+                                            deletePhoto(req, res, deletedPhoto.public_id);
+                                            req.flash('success', 'Post deleted!');
+                                            res.redirect('/posts');
+                                        } else {
+                                            req.flash('error', 'You are not authorized to delete the photo on this post');
+                                            res.redirect('back');
+                                        }
+                                    }
+                                })
                             } else {
-                                // 3. Delete the photo from cloudinary
-                                if(postDeleted.user._id.equals(req.user._id)) {
-                                    deletePhoto(req, res, deletedPhoto.public_id);
-                                    req.flash('success', 'Post deleted!');
-                                    res.redirect('/posts');
-                                } else {
-                                    req.flash('error', 'You are not authorized to delete the photo on this post');
-                                    res.redirect('back');
-                                }
+                                req.flash('success', 'Post deleted!');
+                                res.redirect('/posts');
                             }
-                        })
-                    } else {
-                        req.flash('success', 'Post deleted!');
-                        res.redirect('/posts');
-                    }
+                        }
+                    })
                 }
             });
         }
@@ -187,23 +194,74 @@ function deletePhoto(req,res,publicId) {
 }
 
 // Add fist bump to a post
-router.post('/posts/:id/addFistBump', (req, res) => {
+router.post('/posts/:id/addFistBump', middleware.isLoggedIn, (req, res) => {
 
-    Post.findById(req.params.id, (err, post) => {
+    Post.findById(req.params.id).populate({path: 'likes', populate: {path: 'author'}}).exec((err, post) => {
+        if(err) {
+            req.flash('error', 'Fist bump could not be added, try again.');
+            res.redirect('back');
+        } else {
+            if(post.likes && post.likes.length > 0) {
+                // Check if user already fist bumped this post
+                var alreadyLiked = false
+                for(let i = 0; i < post.likes.length; i++) {
+                    like = post.likes[i];
+                    if(like.author._id.equals(req.user._id)) {
+                        alreadyLiked = true;
+                        // Remove like
+                        Like.findByIdAndDelete(like._id, function(err, deletedLike) {
+                            if(err) {
+                                return res.redirect('back');
+                            } else {
+                                return res.redirect('back');
+                            }
+                        })
+                    }
+                };
+                if(!alreadyLiked) {
+                    addFistBump(req, res, post);
+                }
+            } else {
+                addFistBump(req, res, post);
+            }
+        }
+    });
+});
+
+function addFistBump(req, res, post) {
+    const authorInfo = {
+        author: req.user._id
+    };
+    Like.create(authorInfo, (err, like) => {
         if(err) {
             req.flash('error', 'Something went wrong');
             res.redirect('back');
         } else {
-            Like.create({author = req.user._id}, (err, like) => {
+            post.likes.push(like);
+            post.save().then(() => {
+                req.flash('success', 'You fist bumped this post!');
+                res.redirect('back');
+            });
+        }
+    })
+};
+
+// Render a user's profile
+router.get('/user/:id', middleware.isLoggedIn, (req, res) => {
+    const ssn = req.session;
+    const currentGroup = ssn.currentGroup;
+
+    User.findById(req.params.id).populate('profilePhoto').exec((err, user) => {
+        if(err) {
+            req.flash('error', 'User not found');
+            res.redirect('back');
+        } else {
+            Post.find({group: currentGroup, user: user._id}).populate({path: 'user', populate: {path: 'profilePhoto'}}).populate({path: 'likes', populate: {path: 'author'}}).populate({path: 'comments', populate: {path: 'author'}}).populate('photo').exec((err, posts) => {
                 if(err) {
-                    req.flash('error', 'Something went wrong');
+                    req.flash('error', 'Posts not found');
                     res.redirect('back');
                 } else {
-                    post.likes.push(like);
-                    post.save().then(() => {
-                        req.flash('success', 'Post saved');
-                        res.redirect('back');
-                    });
+                    res.render('publicProfile', {user, posts});
                 }
             })
         }

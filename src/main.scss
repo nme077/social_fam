@@ -39,6 +39,10 @@ body {
     padding-top: 40px;
 }
 
+.navbar {
+    z-index: 10000;
+}
+
 #loginTitle {
     font-size: 3em;
 }
@@ -114,6 +118,16 @@ hr.or:after {
     z-index: 1;
 }
 
+.profileCircle {
+    border-radius: 1000px !important;
+    overflow: hidden;
+    width: 200px;
+    height: 200px;
+    border: 8px solid var(--logo-bg-color);
+    position: relative;
+    z-index: 1;
+}
+
 .postCircle {
     border-radius: 1000px !important;
     overflow: hidden;
@@ -131,6 +145,14 @@ hr.or:after {
 #photoPreview {
     max-height: 300px;
     max-width: 100%;
+}
+
+.postPhoto {
+    max-height: 550px;
+}
+
+.fistBumpIcon {
+    font-size: 1.2em;
 }
 
 .profilePhotoOptions {
@@ -173,7 +195,7 @@ hr.or:after {
 
 .upload-button {
     font-size: 2em;
-    z-index: 2;
+    z-index: 1;
   }
   
   .file-upload {
@@ -192,7 +214,7 @@ hr.or:after {
     position: absolute;
     top: 95px;
     left: 120px;
-    z-index: 100000;
+    z-index: 10;
     color: #666666;
     transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
 }
