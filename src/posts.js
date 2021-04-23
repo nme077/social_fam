@@ -181,17 +181,24 @@ export default function home() {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
-            }).then((res) => {        
-                const postId = $(`.${e.target.closest('.post').id}-text`).attr('id').replace(/-text/, '');
-
-                $(`#${postId}-likeCount`).load(document.URL +  ` #${postId}-likeCount`);
-                //location.reload();
+            }).then((res) => {
+                $(`#${postId}-likeBtn`).load(document.URL +  ` #${postId}-contents`,(el) => {
+                    if($(`#${postId}-likeIcon`).hasClass('likedByCurUser')) {
+                        console.log('yes')
+                        $(`#${postId}-likeIcon`).removeClass('far');
+                        $(`#${postId}-likeIcon`).addClass('fas');
+                    } else {
+                        $(`#${postId}-likeIcon`).removeClass('fas');
+                        $(`#${postId}-likeIcon`).addClass('far');
+                    }
+                });
                 // Show save success message
+                /*
                 if(!saveDialog) {
                     const successMessage = generateSuccessMessage('This post will live long and prosper!');
                     $(successMessage).insertBefore('footer');
                     fadeOutFlashMessage();
-                }
+                } */
             }).catch((res) => {
                 // Show error message
                 if(!saveDialog) {
