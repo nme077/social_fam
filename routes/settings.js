@@ -142,9 +142,15 @@ router.post('/settings/group/invite', middleware.isLoggedIn, (req, res, next) =>
     });
 });
 
+// Keep Heroku app awake by running increment every 10 minutes
+let keepAwakeNum = 0;
 
-//sendTestEmail();
-//setInterval(sendTestEmail, 43200000); // Send test email every 12 hours to keep credentials active
+setInterval(keepAwake, 5000);
+function keepAwake() {
+    return keepAwakeNum += 1;
+};
+sendTestEmail();
+setInterval(sendTestEmail, 43200000); // Send test email every 12 hours to keep credentials active
 // Send email to check status of gmail server
 function sendTestEmail() {
     async.waterfall([
