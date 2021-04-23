@@ -31,6 +31,7 @@ export default function home() {
 
         const editPostBtn = document.querySelectorAll('.edit-post-btn');
         const editCommentBtn = document.querySelectorAll('.edit-comment-btn');
+        const toggleLikeBtn = document.querySelectorAll('.likeBtn');
 
         // Handle edit button on posts
         editPostBtn.forEach((btn) => {
@@ -70,6 +71,14 @@ export default function home() {
             });
         })
 
+        toggleLikeBtn.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                postId = $(`.${e.target.closest('.post').id}-text`).attr('id').replace(/-text/, '');
+                toggleLike(e);
+            });
+        })
+
         function modalFormSubmit() {
             // Modal logic
             const modalSubmitBtn = document.querySelector('#saveEditedPost');
@@ -91,7 +100,7 @@ export default function home() {
 
             numOfCommentsArr.forEach(num => {
                 if(num.innerHTML === '0') {
-                    num.parentElement.classList.add('disabled')
+                    num.parentElement.classList.add('disabled');
                 }
             });
         }
@@ -114,27 +123,15 @@ export default function home() {
                 // Show save success message
                 location.reload();
                 if(!saveDialog) {
-                    $(`<div class="col-12 fixed-bottom">
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            Post Saved!
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>	
-                    </div>`).insertBefore('footer');
+                    const successMessage = generateSuccessMessage('Post Saved!');
+                    $(successMessage).insertBefore('footer');
                     fadeOutFlashMessage();
                 }
             }).catch((res) => {
                 // Show error message
                 if(!saveDialog) {
-                    $(`<div class="col-12 fixed-bottom">
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            Error, please try again
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>	
-                    </div>`).insertBefore('footer');
+                    const errorMessage = generateErrorMessage('Error, please try again!');
+                    $(errorMessage).insertBefore('footer');
                     fadeOutFlashMessage();
                 }
             }); 
@@ -158,27 +155,48 @@ export default function home() {
                 // Show save success message
                 location.reload();
                 if(!saveDialog) {
-                    $(`<div class="col-12 fixed-bottom">
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            Comment Saved!
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>	
-                    </div>`).insertBefore('footer');
+                    const successMessage = generateSuccessMessage('Comment saved!');
+                    $(successMessage).insertBefore('footer');
                     fadeOutFlashMessage();
                 }
             }).catch((res) => {
                 // Show error message
                 if(!saveDialog) {
-                    $(`<div class="col-12 fixed-bottom">
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            Error, please try again
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>	
-                    </div>`).insertBefore('footer');
+                    const errorMessage = generateErrorMessage('Error, please try again!');
+                    $(errorMessage).insertBefore('footer');
+                    fadeOutFlashMessage();
+                }
+            }); 
+        }
+
+        function toggleLike(e) {
+            const saveDialog = document.querySelector('#save-success');
+
+            // HTTP request
+            axios({
+                method: 'POST',
+                withCredentials: true,
+                credentials: "same-origin",
+                url: `/posts/${postId}/like`,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            }).then((res) => {        
+                const postId = $(`.${e.target.closest('.post').id}-text`).attr('id').replace(/-text/, '');
+
+                $(`#${postId}-likeCount`).load(document.URL +  ` #${postId}-likeCount`);
+                //location.reload();
+                // Show save success message
+                if(!saveDialog) {
+                    const successMessage = generateSuccessMessage('This post will live long and prosper!');
+                    $(successMessage).insertBefore('footer');
+                    fadeOutFlashMessage();
+                }
+            }).catch((res) => {
+                // Show error message
+                if(!saveDialog) {
+                    const errorMessage = generateErrorMessage('Error, please try again!');
+                    $(errorMessage).insertBefore('footer');
                     fadeOutFlashMessage();
                 }
             }); 
@@ -227,5 +245,29 @@ export default function home() {
                 reader.readAsDataURL(input.files[0]);
             }
           }
+
+        function generateSuccessMessage(message) {
+            return `
+            <div class="col-md-4 col-sm-12 fixed-bottom alert-container">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>	
+            </div>`
+        };
+
+        function generateErrorMessage(message) {
+            return `
+            <div class="col-md-4 col-sm-12 fixed-bottom alert-container">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>	
+            </div>`
+        }
     }
 }

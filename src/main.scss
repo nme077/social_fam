@@ -104,7 +104,7 @@ hr.or:after {
     padding-bottom: 6.2rem; /* height of footer */
 }
 
-.commentsLabel {
+.commentsLabel, .likeBtn {
     font-size: .75rem;
 }
 
@@ -151,8 +151,13 @@ hr.or:after {
     max-height: 550px;
 }
 
-.fistBumpIcon {
+.likeIcon {
     font-size: 1.2em;
+}
+
+.likeBtn:focus, .likeBtn:active {
+    outline: none !important;
+    box-shadow: none;
 }
 
 .profilePhotoOptions {

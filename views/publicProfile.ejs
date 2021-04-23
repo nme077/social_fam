@@ -76,8 +76,11 @@
                     <!--Button to show comments on post-->
                     <div class="actionsContainer">
 
-                    <form class="d-inline" action="/posts/<%= post._id %>/addFistBump" method="POST">
-                        <button class="btn btn-transparent commentsLabel"><i class="fas fa-fist-raised fistBumpIcon"></i> <span class="likeCount"><%= post.likes.length > 0 ? post.likes.length : '' %></span></button>
+                    <form class="d-inline" action="/posts/<%= post._id %>/addLike" method="POST">
+                        <button class="btn btn-transparent likeBtn" type="button">
+                            <i class="far fa-hand-spock fistBumpIcon"></i>
+                            <span class="likeCount"><%= post.likes.length > 0 ? post.likes.length : '' %></span>
+                        </button>
                     </form>
 
                     <a class="btn btn-transparent commentsLabel" data-toggle="collapse" href="#comments<%= index+1 %>" role="button" aria-expanded="false" aria-controls="collapseExample">Comments (<span class="numOfComments"><%= post.comments.length %></span>)</a>

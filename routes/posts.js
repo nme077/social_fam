@@ -194,11 +194,11 @@ function deletePhoto(req,res,publicId) {
 }
 
 // Add fist bump to a post
-router.post('/posts/:id/addFistBump', middleware.isLoggedIn, (req, res) => {
+router.post('/posts/:id/like', middleware.isLoggedIn, (req, res) => {
 
     Post.findById(req.params.id).populate({path: 'likes', populate: {path: 'author'}}).exec((err, post) => {
         if(err) {
-            req.flash('error', 'Fist bump could not be added, try again.');
+            req.flash('error', 'Error. This post will not live long and prosper yet. Try again.');
             res.redirect('back');
         } else {
             if(post.likes && post.likes.length > 0) {
@@ -219,16 +219,16 @@ router.post('/posts/:id/addFistBump', middleware.isLoggedIn, (req, res) => {
                     }
                 };
                 if(!alreadyLiked) {
-                    addFistBump(req, res, post);
+                    toggleLike(req, res, post);
                 }
             } else {
-                addFistBump(req, res, post);
+                toggleLike(req, res, post);
             }
         }
     });
 });
 
-function addFistBump(req, res, post) {
+function toggleLike(req, res, post) {
     const authorInfo = {
         author: req.user._id
     };
@@ -239,7 +239,7 @@ function addFistBump(req, res, post) {
         } else {
             post.likes.push(like);
             post.save().then(() => {
-                req.flash('success', 'You fist bumped this post!');
+                req.flash('success', 'May this post live long and prosper.');
                 res.redirect('back');
             });
         }
