@@ -43,6 +43,10 @@ body {
     z-index: 10000;
 }
 
+.groupName {
+    color: var(--logo-font-color) !important;
+}
+
 #loginTitle {
     font-size: 3em;
 }
@@ -162,6 +166,10 @@ hr.or:after {
 
 .likedByCurUser {
     color: red;
+}
+
+#inviteLink {
+    word-wrap: break-word;
 }
 
 .profilePhotoOptions {

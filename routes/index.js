@@ -35,6 +35,7 @@ router.use((req, res, next) => {
 
     res.locals.currentUser = req.user;
     res.locals.currentGroup = ssn.currentGroup;
+    res.locals.currentGroupName = ssn.currentGroupName;
     res.locals.path = req.path;
     next();
 });
@@ -111,6 +112,7 @@ router.post('/register', (req, res) => {
                     // Save the user
                     user.save().then(() => {
                         ssn.currentGroup = group._id;
+                        ssn.currentGroupName = group.name;
                         // Create admin user
                         group.adminUser.id = req.user._id;
                         group.adminUser.username = req.user.username;
@@ -173,6 +175,7 @@ router.post('/register/:token', (req, res) => {
                 passport.authenticate('local')(req, res, () => {
                     
                 ssn.currentGroup = group._id;
+                ssn.currentGroupName = group.name;
                 groupIdToRegister = '';
                 if(err) {
                     req.flash('error', 'Something went wrong, try again.');
@@ -264,6 +267,7 @@ router.post('/login/:groupId/:token', passport.authenticate('local', {
         // Register to group
         ssn = req.session;
         ssn.currentGroup = group._id;
+        ssn.currentGroupName = group.name;
         groupIdToRegister = '';
         if(err) {
             req.flash('error', 'Something went wrong, try again.');
@@ -318,9 +322,11 @@ router.post('/select_group',middleware.isLoggedIn, (req, res) => {
     ssn = req.session;
     // Set the current group for the session
     ssn.currentGroup = req.body.groupSelect;
-
-    req.flash('success', 'Successfully logged in. Welcome!')
-    res.redirect('/posts');
+    Group.findById(req.body.groupSelect, (err, group) => {
+        ssn.currentGroupName = group.name;
+        req.flash('success', 'Successfully logged in. Welcome!')
+        res.redirect('/posts');
+    })
 });
 
 // Update user's name

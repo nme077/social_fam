@@ -26,16 +26,24 @@ router.use((req, res, next) => {
     next();
 });
 
+// Variables
+let inviteLink = '';
+
 // Show account settings screen
 router.get('/settings/group', middleware.isLoggedIn, (req, res) => {
     ssn = req.session;
     const currentGroup = ssn.currentGroup;
-    User.findById(req.user.id).populate('profilePhoto').exec((err, user) => {
+    const currentGroupName = ssn.currentGroupName;
+
+    User.findById(req.user.id).populate('profilePhoto').populate('groups').exec((err, user) => {
         if(err) {
             req.flash('error', 'Something went wrong, try again.');
             res.redirect('back');
         } else {
-            res.render('groupOptions', {profilePhoto: user.profilePhoto});
+            console.log(user.groups)
+            res.render('groupOptions', {profilePhoto: user.profilePhoto, inviteLink, groupName: currentGroupName, user});
+            // Set invite link to default state
+            inviteLink = '';
         }
     });
 });
@@ -60,7 +68,7 @@ router.post('/settings/group/invite', middleware.isLoggedIn, (req, res, next) =>
              
             Group.findById(ssn.currentGroup, (err, group) => {
                 if(err) {
-                    req.flash('error', 'Sonething went wrong, try again.');
+                    req.flash('error', 'Something went wrong, try again.');
                     return res.redirect('back');
                 }
                 groupToJoin = group._id;
@@ -142,13 +150,44 @@ router.post('/settings/group/invite', middleware.isLoggedIn, (req, res, next) =>
     });
 });
 
-// Keep Heroku app awake by running increment every 10 minutes
-let keepAwakeNum = 0;
+// Generate a link to invite to current group
+router.post('/settings/group/invite/generate', middleware.isLoggedIn, (req, res) => {
+    let groupToJoin = '';
+    let token = '';
 
-setInterval(keepAwake, 5000);
-function keepAwake() {
-    return keepAwakeNum += 1;
-};
+    crypto.randomBytes(20, (err, buf) => {
+        token = buf.toString('hex');
+    });
+
+    ssn = req.session;
+        
+    Group.findById(ssn.currentGroup, (err, group) => {
+        if(err) {
+            req.flash('error', 'Something went wrong, try again.');
+            return res.redirect('back');
+        }
+        groupToJoin = group._id;
+
+        const newUserInfo = {
+            newUserToken: token,
+            newUserTokenExpires: Date.now() + 86400000, // 24 hours
+            newUserEmail: req.body.email
+        }
+
+        if(group.newUsers !== undefined && group.newUsers.length > 0) {
+            group.newUsers.push(newUserInfo);
+        } else {
+            group.newUsers = [newUserInfo];
+        }
+
+        group.save().then(() => {
+            inviteLink = `https://${req.headers.host}/register/${groupToJoin}/${token}`
+            req.flash('success', 'Invite link generated');
+            res.redirect('back');
+        })
+    });
+});
+
 sendTestEmail();
 setInterval(sendTestEmail, 43200000); // Send test email every 12 hours to keep credentials active
 // Send email to check status of gmail server

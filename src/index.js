@@ -9,6 +9,7 @@ import login from './login';
 import register from './register';
 import home from './posts';
 import groupSettings from './groupSettings';
+import app from './app';
 
 //Document ready function
 window.addEventListener('load', function() {
@@ -21,6 +22,7 @@ login();
 register();
 home();
 groupSettings();
+app();
 
 (function() {
     'use strict';

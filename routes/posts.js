@@ -34,6 +34,7 @@ const upload = multer({
 router.get('/posts', middleware.isLoggedIn, middleware.hasGroup, (req, res) => {
     const ssn = req.session;
     const currentGroup = ssn.currentGroup;
+    const currentGroupName = ssn.currentGroupName;
 
     Post.find({group: currentGroup}).populate({path: 'user', populate: {path: 'profilePhoto'}}).populate({path: 'likes', populate: {path: 'author'}}).populate({path: 'comments', populate: {path: 'author'}}).populate('photo').exec((err, posts) => {
         if(err) {
@@ -42,7 +43,7 @@ router.get('/posts', middleware.isLoggedIn, middleware.hasGroup, (req, res) => {
         } else {
             const sortedPosts = posts.sort((a,b) => { return a.datePosted < b.datePosted ? 1 : -1 });
             
-            res.render('index', {posts: sortedPosts, groupName: currentGroup.name});
+            res.render('index', {posts: sortedPosts, groupName: currentGroupName});
         }
     });
 });

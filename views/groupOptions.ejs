@@ -37,6 +37,7 @@
 
         <div class="row">
           <div class="col-12">
+            <!--User's name-->
             <label class="text-muted" for="fullNameDisplay">Name</label>
             <p class="userInfoText pl-3" id="fullNameDisplay"><%= currentUser.firstName %> <%= currentUser.lastName %> <span class="btn btn-transparent editIcon d-inline d-lg-none" id="editNameBtn" data-toggle="collapse" data-target="#nameForm"><i class="fas fa-pencil-alt"></i></span></p>
 
@@ -57,6 +58,7 @@
         </div>
         <div class="row">
           <div class="col-12">
+            <!--User's email-->
             <label class="text-muted" for="emailDisplay">Email address</label>
             <p class="userInfoText pl-3" id="emailDisplay"><%= currentUser.email %> <span class="btn btn-transparent editIcon d-inline d-lg-none" id="editEmailBtn" data-toggle="collapse" data-target="#emailForm"><i class="fas fa-pencil-alt"></i></span></p>
           
@@ -71,6 +73,17 @@
               </div>
             </form>
           </div> 
+        </div>
+          <div class="row">
+            <div class="col-12">
+              <!--User's groups-->
+              <label class="text-muted" for="emailDisplay">My Fams</label>
+              <ul>
+                <% user.groups.forEach(group => { %>
+                  <li><%= group.name %></li>
+                <% }) %>
+              </ul>
+            </div>
         </div>
     <hr>
     <!--Password change form-->
@@ -88,23 +101,39 @@
         </div>
       </div>
     </form>
+
     <hr>
-        <form action="/settings/group/invite" method="POST" class="col-12" id="inviteMemberEmail">
-          <h3>Invite a new member to your Fam</h3>
-          <div class="form-row form-group">
-            <div class="col-sm-12 col-md-8">
-              <input type="text" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" name="email" required>
-            </div>
-            <div class="col-sm-12 col-md-4">
-              <button type="submit" class="btn btn-primary" id="sendInvite">Send email</button>
-            </div>
-            <div class="col-12">
-              <small id="emailHelp" class="form-text text-muted">An email will be sent to the address above with instructions on how to set up an account and join your Fam!</small>
-            </div>
+    <!--Invite new member to group-->
+    <div class="col-12">
+      <h3>Invite a new member to your Fam</h3>
+    </div>
+
+      <form action="/settings/group/invite/generate" method="POST" class="col-12 my-3">
+        <% if(inviteLink) { %>
+          <p id="inviteLink" class="alert alert-primary"><%= inviteLink %></p>
+        <% } %>
+        <button class="btn btn-primary" >Generate invite link</button>
+        <small id="emailHelp" class="form-text text-muted">The invitation link will be valid for 24 hours and will disappear when the page reloads.</small>
+      </form>
+
+      <form action="/settings/group/invite" method="POST" class="col-12" id="inviteMemberEmail">
+        <h5>Or send an email to a new user</h5>
+        <div class="form-row form-group">
+          <div class="col-sm-12 col-md-8">
+            <input type="text" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" name="email" required>
           </div>
-        </form>
-      </div>
-    </div>  
+          <div class="col-sm-12 col-md-4">
+            <button type="submit" class="btn btn-primary" id="sendInvite">Send email</button>
+          </div>
+          <div class="col-12">
+            <small id="emailHelp" class="form-text text-muted">An email will be sent to the address above with instructions on how to set up an account and join your Fam!</small>
+          </div>
+        </div>
+      </form>
+      <!--End invite new member to group-->
+
+    </div>
+  </div>  
 </div>
 
 <%- include('./partials/footer.ejs'); %>

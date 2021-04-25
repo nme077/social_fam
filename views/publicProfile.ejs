@@ -74,16 +74,21 @@
                     <!--End post-->
 
                     <!--Button to show comments on post-->
-                    <div class="actionsContainer">
-
-                    <form class="d-inline" action="/posts/<%= post._id %>/addLike" method="POST">
-                        <button class="btn btn-transparent likeBtn" type="button">
-                            <i class="far fa-hand-spock fistBumpIcon"></i>
-                            <span class="likeCount"><%= post.likes.length > 0 ? post.likes.length : '' %></span>
-                        </button>
-                    </form>
-
-                    <a class="btn btn-transparent commentsLabel" data-toggle="collapse" href="#comments<%= index+1 %>" role="button" aria-expanded="false" aria-controls="collapseExample">Comments (<span class="numOfComments"><%= post.comments.length %></span>)</a>
+                    <div class="actionsContainer" id="<%= post._id %>-actions">
+                        <form class="d-inline" action="/posts/<%= post._id %>/like" method="POST">
+                            <% let userLikeArr = []; %>
+                            <% post.likes.forEach(like => { userLikeArr.push(like.author._id.toString()) }) %>
+                            <% const likedByCurUser = userLikeArr.includes(currentUser._id.toString()) %>
+                            
+                            <button class="btn btn-transparent likeBtn" id="<%= post._id %>-likeBtn" type="button">
+                            <div id="<%= post._id %>-contents">
+                                <i class="<%= likedByCurUser ? 'fas' : 'far' %> fa-heart likeIcon <%= likedByCurUser ? 'likedByCurUser' : '' %>" id="<%= post._id %>-likeIcon"></i>
+                                <span class="likeCount" id="<%= post._id %>-likeCount"><%= post.likes.length > 0 ? post.likes.length : '' %></span>
+                            </div>
+                            </button>
+                        </form>
+                        <!--Button to show comments on post-->
+                        <a class="btn btn-transparent commentsLabel" data-toggle="collapse" href="#comments<%= index+1 %>" role="button" aria-expanded="false" aria-controls="collapseExample">Comments (<span class="numOfComments"><%= post.comments.length %></span>)</a>
                     </div>
 
                     <!--Comment input-->
