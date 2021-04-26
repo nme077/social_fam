@@ -264,7 +264,7 @@ router.get('/user/:id', middleware.isLoggedIn, (req, res) => {
                 } else {
                     const sortedPosts = posts.sort((a,b) => { return a.datePosted < b.datePosted ? 1 : -1 });
 
-                    res.render('publicProfile', {user, sortedPosts});
+                    res.render('publicProfile', {user, posts: sortedPosts});
                 }
             })
         }
