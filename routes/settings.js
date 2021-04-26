@@ -40,7 +40,6 @@ router.get('/settings/group', middleware.isLoggedIn, (req, res) => {
             req.flash('error', 'Something went wrong, try again.');
             res.redirect('back');
         } else {
-            console.log(user.groups)
             res.render('groupOptions', {profilePhoto: user.profilePhoto, inviteLink, groupName: currentGroupName, user});
             // Set invite link to default state
             inviteLink = '';
