@@ -12,10 +12,11 @@ export default function home() {
          });
 
          // Handle post text submission
+         /*
          $('#submitPostText').on('click', (e) => {
             e.preventDefault();
             $('.postFormContainer').trigger('submit');
-         });
+         });*/
 
         // ID to use when submitting update form
         let typeOfForm = '';

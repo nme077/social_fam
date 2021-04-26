@@ -40,7 +40,7 @@ router.get('/settings/group', middleware.isLoggedIn, (req, res) => {
             req.flash('error', 'Something went wrong, try again.');
             res.redirect('back');
         } else {
-            res.render('groupOptions', {profilePhoto: user.profilePhoto, inviteLink, groupName: currentGroupName, user});
+            res.render('settings', {profilePhoto: user.profilePhoto, inviteLink, groupName: currentGroupName, user});
             // Set invite link to default state
             inviteLink = '';
         }
@@ -187,8 +187,10 @@ router.post('/settings/group/invite/generate', middleware.isLoggedIn, (req, res)
     });
 });
 
+
+// Send test email every 12 hours to keep credentials active
 sendTestEmail();
-setInterval(sendTestEmail, 43200000); // Send test email every 12 hours to keep credentials active
+setInterval(sendTestEmail, 43200000);
 // Send email to check status of gmail server
 function sendTestEmail() {
     async.waterfall([

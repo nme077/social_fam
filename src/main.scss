@@ -101,7 +101,6 @@ hr.or:after {
 .page-container {
     padding-top: 40px;
     position: relative;
-    min-height: 100vh;
 }
 
 .content-wrap {
@@ -110,6 +109,19 @@ hr.or:after {
 
 .commentsLabel, .likeBtn {
     font-size: .75rem;
+}
+
+#posts-thumbnail {
+    position: relative;
+    left: 10%;
+    bottom: 90px;
+    transform: rotate(-15deg);
+}
+
+#postcomment-thumbnail {
+    position: relative;
+    left: 30%;
+    transform: rotate(15deg);
 }
 
 .circle {

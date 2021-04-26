@@ -262,7 +262,9 @@ router.get('/user/:id', middleware.isLoggedIn, (req, res) => {
                     req.flash('error', 'Posts not found');
                     res.redirect('back');
                 } else {
-                    res.render('publicProfile', {user, posts});
+                    const sortedPosts = posts.sort((a,b) => { return a.datePosted < b.datePosted ? 1 : -1 });
+
+                    res.render('publicProfile', {user, sortedPosts});
                 }
             })
         }

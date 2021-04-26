@@ -90,4 +90,41 @@ export default function groupSettings() {
         e.preventDefault();
         $('#passwordChangeForm').trigger('submit');
     });
+
+    const inviteLink = document.querySelector('#inviteLink');
+
+    if(inviteLink !== null) {
+        inviteLink.onclick = function() {
+            document.execCommand("copy");
+        }
+
+        inviteLink.addEventListener("copy", function(e) {
+            e.preventDefault();
+            if (e.clipboardData) {
+                e.clipboardData.setData("text/plain", inviteLink.textContent);
+                const successMessage = generateSuccessMessage('Invite link copied to clipboard');
+                $(successMessage).insertBefore('footer');
+                fadeOutFlashMessage();
+            }
+        });
+    }
+
+    // Handle fadeout of flash messages
+    function fadeOutFlashMessage() {
+        setTimeout(() => {
+            $('.alert-container').fadeOut("slow")
+        },10000);
+    };
+
+    function generateSuccessMessage(message) {
+        return `
+        <div class="col-md-4 col-sm-12 fixed-bottom alert-container">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>	
+        </div>`
+    };
 }

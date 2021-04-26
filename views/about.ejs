@@ -1,0 +1,18 @@
+<%- include('./partials/header.ejs'); %>
+
+<div class="row d-flex min-vh-100 align-items-center about-section-1">
+    <div class="col-xl-6 col-lg-5 d-flex justify-content-center">
+        <div class="pt-2 mx-auto mb-5 mb-lg-0 ms-lg-0 me-xl-7 text-center text-lg-start">
+            <h2 class="navbar-brand appLogo" style="font-size: 2.5em;"><%= appName %></h2>
+            <h3 class="h4 fw-light opacity-70 line-height-base">The social network for your family</h3>
+            <a class="btn btn-primary my-3" href="/login">Get Started</a>
+        </div>
+    </div>
+    <div class="col-xl-6 col-lg-7">
+        <img class="w-50 img-thumbnail" src="/posts.png" alt="posts" id="posts-thumbnail">
+        <img class="w-50 img-thumbnail" src="/postCommentEx.png" alt="" id="postcomment-thumbnail">
+    </div>
+</div>
+
+
+<%- include('./partials/footer.ejs'); %>

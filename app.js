@@ -67,9 +67,9 @@ app.use((req, res, next) => {
 // Config routes
 app.use('/', postsRoutes);
 app.use('/', settingsRoutes);
-app.use('/', index);
 app.use('/', mediaRoutes)
 app.use('/posts/:id/comments', commentRoutes);
+app.use('/', index); // Must be last route
 
 app.get('*', (req, res) => {
     res.redirect('/');

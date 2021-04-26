@@ -127,7 +127,6 @@ router.delete('/photo/profile/:id', middleware.isLoggedIn, async(req, res) => {
                     // 2. Delete profile photo from user
                     User.findByIdAndUpdate(req.user.id, {profilePhoto: null}, (err, user) => {
                         if(err) {
-                            console.log(err)
                             req.flash('error', 'Something went wrong');
                             res.redirect('back');
                         } else {

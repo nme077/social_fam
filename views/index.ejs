@@ -14,7 +14,8 @@
           </div>
           
           <div>
-            <form action="/posts" method="POST" enctype="multipart/form-data" class="form-group d-flex postFormContainer">
+            <form action="/posts" method="POST" enctype="multipart/form-data" class="form-group postFormContainer needs-validation" novalidate>
+              <div class="form-row">
               <div class="uploadPhotoForm col-2 col-md-1 px-0">
                 <i class="fa fa-camera upload-button"></i>
                 <input class="file-upload" id="photoUpload" name="photoUpload" type="file" accept="image/*"/>
@@ -23,8 +24,11 @@
                 <textarea maxlength="500" type="text" class="form-control" id="postText" name="postText" placeholder="What do you want to say?" contenteditable="true" style="resize: vertical;" required></textarea>
                 <p class="charCount"><span id="curCharCount">0</span>/500</p>
               </div>
+            </div>
+            <div class="form-row">
+              <button class="btn btn-primary btn-block" type="submit" id="submitPostText">Post</button>
+            </div>
             </form>
-            <button class="btn btn-primary btn-block" type="submit" id="submitPostText">Add entry</button>
           </div>
         </div>
       <!--End add post form-->

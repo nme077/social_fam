@@ -42,7 +42,7 @@ router.use((req, res, next) => {
 
 // Landing page
 router.get('/', (req, res) => {
-    res.render('landing');
+    res.render('about');
 });
 
 // Render register page from invite email
@@ -429,6 +429,11 @@ router.post('/logout', (req, res) => {
     req.logout();
     req.flash('success','You have logged out!')
     res.redirect('/login')
+});
+
+// Landing page
+router.get('*', (req, res) => {
+    res.render('landing');
 });
 
 module.exports = router;
