@@ -36,7 +36,7 @@ middlewareObj.verifyCommentOwnership = function(req, res, next) {
 				req.flash('error', "Something went wrong");
 				res.redirect('/posts');
 			} else {
-				if(foundComment.author.id.equals(req.user._id)) {
+				if(foundComment.author._id.equals(req.user._id)) {
 					next();
 				} else {
 					req.flash('error', "Permission denied");

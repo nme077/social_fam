@@ -111,10 +111,15 @@ hr.or:after {
     font-size: .75rem;
 }
 
+.about-container {
+    padding-top: 40px;
+    padding-bottom: 6rem;
+}
+
 #posts-thumbnail {
     position: relative;
     left: 10%;
-    bottom: 90px;
+    bottom: 10%;
     transform: rotate(-15deg);
 }
 
@@ -152,10 +157,6 @@ hr.or:after {
     border: 1px solid var(--logo-bg-color);
     position: relative;
     z-index: 1;
-}
-
-.postHeading {
-    padding-left: 0 !important;
 }
 
 #photoPreview {
@@ -196,6 +197,10 @@ hr.or:after {
     width: 100%;
     font-size: 4em;
     color: lightslategray;
+}
+
+#profilePagePhoto {
+    font-size: 6.5em;
 }
 
 .profilePhotoPlaceholderPost {

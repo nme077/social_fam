@@ -90,13 +90,13 @@ router.post('/settings/group/invite', middleware.isLoggedIn, (req, res, next) =>
             })
         },
         function(token,group,done) {
-            oAuth2Client.getAccessToken((err, token) => {
+            oAuth2Client.getAccessToken((err, accessToken) => {
                 if (err) {
                     console.log(err)
                     req.flash('error', 'Something went wrong, try again.');
                     return res.redirect('back');
                 }
-                done(err, token)
+                done(err, token, accessToken)
             });
         },
         function(token, accessToken, done) {
@@ -189,8 +189,8 @@ router.post('/settings/group/invite/generate', middleware.isLoggedIn, (req, res)
 
 
 // Send test email every 12 hours to keep credentials active
-//sendTestEmail();
-//setInterval(sendTestEmail, 43200000);
+sendTestEmail();
+setInterval(sendTestEmail, 43200000);
 // Send email to check status of gmail server
 function sendTestEmail() {
     async.waterfall([

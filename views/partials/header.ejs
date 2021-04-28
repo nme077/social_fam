@@ -11,9 +11,9 @@
 <body style="visibility: hidden;" onload="document.body.style.visibility='visible'">
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <a class="navbar-brand appLogo" href="#"><%= appName %></a>
+        <a class="navbar-brand appLogo" href="<%= currentUser ? '/posts' : '/' %>"><%= appName %></a>
 
-        <% if(path !== '/select_group' && currentGroup) { %>
+        <% if(path !== '/select_group' && path !== '/' && currentGroup) { %>
         <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -53,6 +53,8 @@
   <div class="page-container min-vh-100">
     <div class="content-wrap">
 <% } else { %> 
-  <div class="min-vh-100">
-    <div class="about-wrap">
+  <div class="d-flex align-items-center position-relative min-vh-100 overflow-hidden pt-6 pb-lg-5 about-container">
+  <!--<div class="page-container     min-vh-100">-->
+    <!--<div class="content-wrap">-->
+      <div>
 <% } %>
