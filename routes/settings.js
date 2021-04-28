@@ -187,6 +187,36 @@ router.post('/settings/group/invite/generate', middleware.isLoggedIn, (req, res)
     });
 });
 
+// Create a new group from settings screen
+router.post('/settings/group', middleware.isLoggedIn, (req, res) => {
+    const groupInfo = {
+        name: req.body.newGroupName,
+        adminUser: req.user._id,
+        users: [req.user]
+    }
+
+    Group.create(groupInfo, (err, group) => {
+        if(err) {
+            console.log('Group not created: ' + err);
+            req.flash('error', 'Something went wrong, try again.');
+            res.redirect('back');
+        } else {
+            User.findById(req.user._id, (err, user) => {
+                if(err) {
+                    req.flash('error', 'Something went wrong, try again.');
+                    return res.redirect('back');
+                }
+                user.groups.push(group);
+                // Save the user, then push the user to the group's array
+                user.save().then(() => {
+                    req.flash('success', `${group.name} created! Logout and log back in to switch Fams.`);
+                    res.redirect('back');
+                });
+            });
+        }
+    })
+});
+
 
 // Send test email every 12 hours to keep credentials active
 sendTestEmail();

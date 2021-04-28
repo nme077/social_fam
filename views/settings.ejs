@@ -131,6 +131,25 @@
         </div>
       </form>
       <!--End invite new member to group-->
+      <hr>
+
+      <div  class="col-12 my-3">
+        <h3>Create a new Fam</h3>
+        <form action="/settings/group" method="POST">
+          <div class="form-row form-group">
+            <div class="col-sm-12 col-md-8">
+              <input type="text" class="form-control" placeholder="New Fam Name" aria-label="new-group" aria-describedby="basic-addon1" name="newGroupName" required>
+            </div>
+            <div class="col-sm-12 col-md-4">
+              <button type="submit" class="btn btn-primary" id="createNewFam">Create a new Fam</button>
+            </div>
+            <div class="col-12">
+              <small id="emailHelp" class="form-text text-muted">A new group will be created and you will be signed out of your current session.</small>
+            </div>
+          </div>
+        </form>
+      </div>
+
     </div>
   </div>  
 </div>

@@ -251,6 +251,7 @@ function toggleLike(req, res, post) {
 router.get('/user/:id', middleware.isLoggedIn, (req, res) => {
     const ssn = req.session;
     const currentGroup = ssn.currentGroup;
+    const currentGroupName = ssn.currentGroupName;
 
     User.findById(req.params.id).populate('profilePhoto').exec((err, user) => {
         if(err) {
@@ -264,7 +265,7 @@ router.get('/user/:id', middleware.isLoggedIn, (req, res) => {
                 } else {
                     const sortedPosts = posts.sort((a,b) => { return a.datePosted < b.datePosted ? 1 : -1 });
 
-                    res.render('publicProfile', {user, posts: sortedPosts});
+                    res.render('publicProfile', {user, posts: sortedPosts, groupName: currentGroupName});
                 }
             })
         }
