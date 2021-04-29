@@ -191,7 +191,10 @@ router.post('/settings/group/invite/generate', middleware.isLoggedIn, (req, res)
 router.post('/settings/group', middleware.isLoggedIn, (req, res) => {
     const groupInfo = {
         name: req.body.newGroupName,
-        adminUser: req.user._id,
+        adminUser: {
+            id: req.user._id,
+            username: req.user.username
+        },
         users: [req.user]
     }
 

@@ -151,19 +151,16 @@ router.post('/register/:token', (req, res) => {
             req.flash('error', 'Group not found')
             return res.redirect('back')
         }
+        let groupIdToRemove;
         group.newUsers.forEach(el => {
             // Find if the token exists in the group
             if(el.newUserToken === req.params.token && currentTime < el.newUserTokenExpires) {
-                group.newUsers.pull(el._id);
-                group.save();
+                groupIdToRemove = el._id;
                 validInvite = true;
                 return;
             }
         });
         if(validInvite) {
-            // Re-initialize validInvite
-            validInvite = false;
-
             User.register(new User(userInfo), req.body.password, (err, user) => {
                 if(err) {
                     req.flash('error', err.message);
@@ -185,6 +182,10 @@ router.post('/register/:token', (req, res) => {
                     user.groups = [group];
                     user.save().then(() => {
                         group.users.push(user);
+                        // Re-initialize validInvite
+                        validInvite = false;
+                        // Remove the token
+                        group.newUsers.pull(groupIdToRemove);
                         group.save().then(() => {
                             req.flash('success', `Welcome, ${req.user.firstName}!`);
                             res.redirect('/posts');
@@ -251,12 +252,14 @@ router.post('/login/:groupId/:token', passport.authenticate('local', {
             req.flash('error', 'Group not found, try again.')
             return res.redirect('back')
         }
+        let groupIdToRemove;
         // loop over newUsers array to find a valid token
         group.newUsers.forEach(el => {
             // Find if the token exists in the group
             if(el.newUserToken === req.params.token && currentTime < el.newUserTokenExpires) {
                 // Set to current group id
                 groupIdToRegister = req.params.groupId;
+                groupIdToRemove = el._id;
                 valid = true;
                 return groupIdToRegister;
             }
@@ -283,6 +286,9 @@ router.post('/login/:groupId/:token', passport.authenticate('local', {
                 // Save the user, then push the user to the group's array
                 user.save().then(() => {
                     group.users.push(user);
+                    // Remove the token
+                    group.newUsers.pull(groupIdToRemove);
+
                     group.save().then(() => {
                         req.flash('success', `Welcome, ${req.user.firstName}!`);
                         res.redirect('/posts');
