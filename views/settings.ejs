@@ -108,22 +108,32 @@
       <h3>Invite a new member to your Fam</h3>
     </div>
 
-      <form action="/settings/group/invite/generate" method="POST" class="col-12 my-3">
+      <form action="/settings/group/invite/generate" method="POST" class="col-12 my-3" id="inviteLinkForm">
         <% if(inviteLink) { %>
           <p id="inviteLink" class="alert alert-primary"><%= inviteLink %></p>
         <% } %>
-        <button class="btn btn-primary" >Generate invite link</button>
+        <button class="btn btn-primary" id="generateInviteBtn">
+          <div class="spinner-grow spinner-grow-sm d-none" role="status" id="loadingSpinnerInviteLink">
+            <span class="sr-only">Loading...</span>
+          </div>
+          <span id="generateInviteBtnTxt">Generate invite link</span>
+        </button>
         <small id="emailHelp" class="form-text text-muted">The invitation link will be valid for 24 hours and will disappear when the page reloads.</small>
       </form>
 
-      <form action="/settings/group/invite" method="POST" class="col-12" id="inviteMemberEmail">
+      <form action="/settings/group/invite" method="POST" class="col-12 needs-validation" id="inviteMemberEmail" novalidate>
         <h5>Or send an email to a new user</h5>
         <div class="form-row form-group">
           <div class="col-sm-12 col-md-8">
-            <input type="text" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" name="email" required>
+            <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1" name="email" required>
           </div>
           <div class="col-sm-12 col-md-4">
-            <button type="submit" class="btn btn-primary" id="sendInvite">Send email</button>
+            <button type="submit" class="btn btn-primary" id="sendInvite">
+              <div class="spinner-grow spinner-grow-sm d-none" role="status" id="loadingSpinnerEmailInvite">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <span id="emailInviteBtnTxt">Send email</span>
+            </button>
           </div>
           <div class="col-12">
             <small id="emailHelp" class="form-text text-muted">An email will be sent to the address above with instructions on how to set up an account and join your Fam!</small>
@@ -144,7 +154,7 @@
               <button type="submit" class="btn btn-primary" id="createNewFam">Create a new Fam</button>
             </div>
             <div class="col-12">
-              <small id="emailHelp" class="form-text text-muted">A new group will be created and you will be signed out of your current session.</small>
+              <small id="emailHelp" class="form-text text-muted">A new group will be created. Sign out and back in to view the new group.</small>
             </div>
           </div>
         </form>

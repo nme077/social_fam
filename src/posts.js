@@ -1,5 +1,7 @@
 const $ = require('jquery');
 const axios = require('axios');
+import 'bootstrap';
+import 'popper.js';
 
 export default function home() {
     if(window.location.pathname === '/posts') {
@@ -10,6 +12,15 @@ export default function home() {
         $(".upload-button").on('click', function() {
             $(".file-upload").trigger('click');
          });
+
+        $('.postFormContainer').on('submit', function() {
+            const form = document.querySelector('.postFormContainer');
+
+            if (form.checkValidity()) {
+                $('#loadingSpinnerPost').removeClass('d-none');
+                $('#postBtnText').addClass('d-none');
+            }
+        });
 
         // Update character count on input field
         $('#postText').on('input', (e) => {

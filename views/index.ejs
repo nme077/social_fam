@@ -26,7 +26,12 @@
               </div>
             </div>
             <div class="form-row">
-              <button class="btn btn-primary btn-block" type="submit" id="submitPostText">Post</button>
+              <button class="btn btn-primary btn-block" type="submit" id="submitPostText">
+                <span id="postBtnText">Post</span>
+                <div class="spinner-grow spinner-grow-sm d-none" role="status" id="loadingSpinnerPost">
+                  <span class="sr-only">Loading...</span>
+                </div>
+            </button>
             </div>
             </form>
           </div>

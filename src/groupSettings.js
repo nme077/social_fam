@@ -77,8 +77,14 @@ export default function groupSettings() {
     });
 
     $('#sendInvite').on('click', (e) => {
-        e.preventDefault();
-        $('#inviteMemberEmail').trigger('submit');
+        const form = document.querySelector('#inviteMemberEmail');
+
+        if (form.checkValidity()) {
+        // Loading
+            $('#loadingSpinnerEmailInvite').removeClass('d-none');
+            $('#emailInviteBtnTxt').addClass('d-none');
+        }
+        //$('#inviteMemberEmail').trigger('submit');
     });
 
     $('#deleteProfilePhoto').on('click', (e) => {
@@ -89,6 +95,13 @@ export default function groupSettings() {
     $('#passwordChangeSubmit').on('click', (e) => {
         e.preventDefault();
         $('#passwordChangeForm').trigger('submit');
+    });
+
+    // Handle generate invite link button
+    $('#generateInviteBtn').on('click', (e) => {
+
+        $('#loadingSpinnerInviteLink').removeClass('d-none');
+        $('#generateInviteBtnTxt').addClass('d-none');
     });
 
     const inviteLink = document.querySelector('#inviteLink');

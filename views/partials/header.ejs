@@ -21,8 +21,13 @@
         
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav d-lg-none">
+              <% if(typeof user !== 'undefined') { %>
+                <li class="nav-item">
+                  <a class="nav-link disabled" href=""><%= user.firstName %> <%= user.lastName %><span class="sr-only">(current)</span></a>
+                </li>
+              <% } %>
               <li class="nav-item">
-                <a class="nav-link home-btn" href="/posts">Posts<span class="sr-only">(current)</span></a>
+                <a class="nav-link home-btn" href="/posts">Home<span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link group-settings-btn" href="/settings/group">Settings</a>

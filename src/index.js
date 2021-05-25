@@ -13,6 +13,7 @@ import app from './app';
 
 //Document ready function
 window.addEventListener('load', function() {
+  // Bootstrap form validation
   (function() {
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     var forms = document.getElementsByClassName('needs-validation');
@@ -27,15 +28,17 @@ window.addEventListener('load', function() {
       }, false);
     });
   })();
+
   // Fadeout flash messages
-setTimeout(() => {
-  $('.alert-container').fadeOut("slow")
-},10000);
-// Run code from other js files
-login();
-register();
-home();
-groupSettings();
-app();
+  setTimeout(() => {
+    $('.alert-container').fadeOut("slow")
+  },10000);
+  
+  // Run code from other js files
+  login();
+  register();
+  home();
+  groupSettings();
+  app();
 
 });
