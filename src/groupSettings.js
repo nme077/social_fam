@@ -1,4 +1,5 @@
 const $ = require('jquery');
+const axios = require('axios');
 
 export default function groupSettings() {
     if(window.location.pathname === '/settings/group') {
@@ -92,14 +93,9 @@ export default function groupSettings() {
         $('#deleteProfilePhotoForm').trigger('submit');
     });
 
-    $('#passwordChangeSubmit').on('click', (e) => {
-        e.preventDefault();
-        $('#passwordChangeForm').trigger('submit');
-    });
 
     // Handle generate invite link button
     $('#generateInviteBtn').on('click', (e) => {
-
         $('#loadingSpinnerInviteLink').removeClass('d-none');
         $('#generateInviteBtnTxt').addClass('d-none');
     });

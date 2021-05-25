@@ -41,7 +41,7 @@
             <label class="text-muted" for="fullNameDisplay">Name</label>
             <p class="userInfoText pl-3" id="fullNameDisplay"><%= currentUser.firstName %> <%= currentUser.lastName %> <span class="btn btn-transparent editIcon d-inline d-lg-none" id="editNameBtn" data-toggle="collapse" data-target="#nameForm"><i class="fas fa-pencil-alt"></i></span></p>
 
-            <form action="/user/<%= currentUser._id %>/fullname?_method=PUT" method="POST" class="editForm collapse" id="nameForm">
+            <form action="/user/<%= currentUser._id %>/fullname?_method=PUT" method="POST" class="editForm collapse needs-validation" id="nameForm" novalidate>
               <div class="form-row form-group">
                 <div class="col-sm-12 col-md-5">
                     <input type="text" class="form-control" id="first-name" name="firstName" placeholder="First name" required>    
@@ -62,7 +62,7 @@
             <label class="text-muted" for="emailDisplay">Email address</label>
             <p class="userInfoText pl-3" id="emailDisplay"><%= currentUser.email %> <span class="btn btn-transparent editIcon d-inline d-lg-none" id="editEmailBtn" data-toggle="collapse" data-target="#emailForm"><i class="fas fa-pencil-alt"></i></span></p>
           
-            <form action="/user/<%= currentUser._id %>/email?_method=PUT" method="POST" class="editForm collapse" id="emailForm">
+            <form action="/user/<%= currentUser._id %>/email?_method=PUT" method="POST" class="editForm collapse needs-validation" id="emailForm" novalidate>
               <div class="form-row form-group">
                 <div class="col-sm-12 col-md-5">
                   <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Email address" required>
@@ -87,7 +87,7 @@
         </div>
     <hr>
     <!--Password change form-->
-    <form action="/reset" method="POST" id="passwordChangeForm" class="col-12">
+    <form action="/reset" method="POST" id="passwordChangeForm" class="col-12 needs-validation" novalidate>
       <h3>Change password</h3>
       <div class="form-row form-group">
         <div class="col-sm-12 col-md-4">
@@ -145,7 +145,7 @@
 
       <div  class="col-12 my-3">
         <h3>Create a new Fam</h3>
-        <form action="/settings/group" method="POST">
+        <form action="/settings/group" method="POST" class="needs-validation" novalidate>
           <div class="form-row form-group">
             <div class="col-sm-12 col-md-8">
               <input type="text" class="form-control" placeholder="New Fam Name" aria-label="new-group" aria-describedby="basic-addon1" name="newGroupName" required>

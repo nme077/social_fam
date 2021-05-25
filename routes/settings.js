@@ -27,7 +27,7 @@ router.use((req, res, next) => {
 });
 
 // Variables
-let inviteLink = '';
+let inviteLink;
 
 // Show account settings screen
 router.get('/settings/group', middleware.isLoggedIn, (req, res) => {
