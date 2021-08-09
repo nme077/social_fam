@@ -35,6 +35,60 @@ body {
     background-color: var(--page-background);
 }
 
+.separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1.25em;
+    font-size: .75em;
+}
+
+.separator::before,
+.separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgb(146, 146, 146);
+}
+
+.separator:not(:empty)::before {
+    margin-right: .25em;
+}
+
+.separator:not(:empty)::after {
+    margin-left: .25em;
+}
+
+.bg-social {
+    position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+
+    z-index: -1000;
+    font-size: 45vw;
+    color: #046C8C;
+    opacity: 20%;
+}
+
+@media screen and (max-width: 601px) {
+    .bg-social {
+        font-size: 60vw;
+    }
+}
+
+.icon-2 {
+    top: 5%;
+    right: 0;
+    position: absolute;
+    transform: rotate(180deg);
+}
+
+.icon-1 {
+    bottom: 0;
+    position: absolute;
+}
+
 .content-wrap {
     padding-top: 40px;
 }
@@ -101,6 +155,7 @@ hr.or:after {
 .page-container {
     padding-top: 40px;
     position: relative;
+    overflow: hidden;
 }
 
 .content-wrap {

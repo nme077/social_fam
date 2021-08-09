@@ -14,7 +14,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
 		if(err) {
 			console.log(err);
 			req.flash('error', "Somethng went wrong");
-			res.redirect('/posts');
+			res.redirect('back');
 		} else {
 			Comment.create({text: req.body.comment}, (err, comment) => {
 				if(err) {
@@ -29,7 +29,7 @@ router.post('/', middleware.isLoggedIn, (req, res) => {
 						post.comments.push(comment);
 						post.save();
 						req.flash('success', "Comment added");
-						res.redirect('/posts');
+						res.redirect('back');
 					});
 				}
 			})

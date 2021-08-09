@@ -2,23 +2,27 @@
 
 
 <div class="container">
-    <h1 class="text-center mb-5" id="loginTitle"><strong>Which Fam?</strong></h1>
     <div class="row justify-content-md-center">
-        <form action="/select_group" method="POST" class="centered col-md-4">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                <label class="input-group-text" for="groupSelect">Fam</label>
+        <div class="col-md-4">
+            <h1 class="text-left mb-3" id="loginTitle"><strong>Which Fam?</strong></h1>
+            <form action="/select_group" method="POST" class="centered">
+                <div class="input-group mb-3">
+                    <select class="custom-select" id="groupSelect" name="groupSelect">
+                    <option value="" selected>Choose...</option>
+                    <% groupArr.forEach(group => { %>
+                        <option value="<%= group._id %>"><%= group.name %></option>
+                    <% }); %>
+                    </select>
                 </div>
-                <select class="custom-select" id="groupSelect" name="groupSelect">
-                <option value="" selected>Choose...</option>
-                <% groupArr.forEach(group => { %>
-                    <option value="<%= group._id %>"><%= group.name %></option>
-                <% }); %>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block" id="submitGroup" disabled>Submit</button>
-        </form>
+                <button type="submit" class="btn btn-primary btn-block" id="submitGroup" disabled>Submit</button>
+            </form>
+        </div>
     </div>
+</div>
+
+<div class="bg-social">
+    <i class="fas fa-comment icon-1"></i>
+    <i class="fas fa-comment icon-2"></i>
 </div>
 
 <%- include('./partials/footer.ejs'); %>

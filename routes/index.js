@@ -25,9 +25,10 @@ function removeExpiredTokens(group) {
     group.newUsers.forEach(el => {
         if(currentTime > el.newUserTokenExpires) {
             group.newUsers.pull(el._id);
-            group.save();
         }
     });
+
+    group.save();
 }
 
 router.use((req, res, next) => {
@@ -69,10 +70,10 @@ router.get('/register/:groupId/:token', (req, res) => {
     })
 });
 
-// Register page
+// Show register page
 router.get('/register', (req, res) => {
     // Pass groupid as blank
-    res.render('register', {groupId: '', groupName: '', token: ''});
+    res.render('register', {groupId: '', groupName: '', token: '', googleId: ''});
 });
 
 // Register the user
@@ -103,7 +104,6 @@ router.post('/register', (req, res) => {
             }
             Group.create(groupInfo, async(err, group) => {
                 if(err) {
-                    console.log('Group not created: ' + err);
                     req.flash('error', 'Something went wrong, try again.');
                     res.redirect('back');
                 } else {
@@ -200,6 +200,8 @@ router.post('/register/:token', (req, res) => {
     });
 });
 
+let tokenToJoinGroup;
+
 // Render login page from invite
 router.get('/login/:groupId/:token', (req, res) => {
     // If the invite is expired, display a message to contact the admin of the group.
@@ -220,7 +222,9 @@ router.get('/login/:groupId/:token', (req, res) => {
             if(el.newUserToken === req.params.token && currentTime < el.newUserTokenExpires) {
                 // Set to current group id
                 groupIdToRegister = req.params.groupId;
+                // Note that token is valid
                 valid = true;
+                tokenToJoinGroup = req.params.token;
                 return res.render('login', { groupName: group.name,groupId: req.params.groupId, token: req.params.token });
             }
         });
@@ -238,9 +242,6 @@ router.post('/login/:groupId/:token', passport.authenticate('local', {
     failureRedirect: '/login',
     failureFlash: true
 }), (req, res) => {
-    //if(req.session.returnTo) {
-    //    return res.redirect(req.session.returnTo);
-    //}
     const currentTime = Date.now();
     Group.findById(req.params.groupId, (err, group) => {
         let valid = false;
@@ -304,15 +305,17 @@ router.post('/login', passport.authenticate('local', {
     failureRedirect: '/login',
     failureFlash: true
 }), (req, res) => {
-    //if(req.session.returnTo) {
-    //    return res.redirect(req.session.returnTo);
-    //}
     res.redirect('/select_group');
 }); 
 
 // Render the page to select a group during login
-router.get('/select_group',middleware.isLoggedIn, (req, res) => {
-    // If user navigates away, log them out and display 'login canceled'
+router.get('/select_group', middleware.isLoggedIn, (req, res) => {
+    if(groupIdToRegister) {
+        return res.redirect('/update/fam/join');
+    }
+    if(req.user.groups.length == 0 || req.user.groups === null) {
+        return res.redirect('/update/fam');
+    }
     Group.find({'_id': { $in: req.user.groups}}, (err, groupArr) => {
         if(err) {
             req.flash('error', 'Something went wrong, try again.');
@@ -333,6 +336,124 @@ router.post('/select_group',middleware.isLoggedIn, (req, res) => {
         req.flash('success', 'Successfully logged in. Welcome!')
         res.redirect('/posts');
     })
+});
+
+router.get('/update/fam/join', middleware.isLoggedIn, (req, res) => {
+    Group.findById(groupIdToRegister, (err, group) => {
+        if(err) {
+            req.flash('error', 'Error, try again!')
+            return res.redirect('back')
+        }
+        res.render('joinGroup', {group});
+    })
+})
+
+// Join existing Fam based on token from invite using google auth
+router.post('/update/fam/join', middleware.isLoggedIn, (req, res) => {
+    currentTime = Date.now();
+
+    Group.findById(groupIdToRegister, (err, group) => {
+        let validInvite = false;
+        if(err) {
+            req.flash('error', 'Error, try again!')
+            return res.redirect('back')
+        }
+        if(group == undefined || group === {}) {
+            req.flash('error', 'Group not found')
+            return res.redirect('back')
+        }
+        let groupIdToRemove;
+        group.newUsers.forEach(el => {
+            // Find if the token exists in the group
+            if(el.newUserToken === tokenToJoinGroup && currentTime < el.newUserTokenExpires) {
+                groupIdToRemove = el._id;
+                validInvite = true;
+                return;
+            }
+        });
+        // Don't continue if the link is invalid
+        if(!validInvite) return res.render('invalidToken');
+
+        // Register to group
+        ssn = req.session;
+        ssn.currentGroup = group._id;
+        ssn.currentGroupName = group.name;
+        groupIdToRegister = '';
+        if(err) {
+            req.flash('error', 'Something went wrong, try again.');
+            res.redirect('back');
+        } else {
+            // Add group to user's list of groups
+            User.findById(req.user._id, (err, user) => {
+                if(err) {
+                    req.flash('error', 'Something went wrong, try again.');
+                    return res.redirect('back');
+                }
+                user.groups.push(group);
+                // Save the user, then push the user to the group's array
+                user.save().then(() => {
+                    group.users.push(user);
+                    // Remove the token
+                    group.newUsers.pull(groupIdToRemove);
+
+                    group.save().then(() => {
+                        req.flash('success', `Welcome, ${req.user.firstName}!`);
+                        res.redirect('/posts');
+                    });
+                });
+            })
+        };
+    });
+})
+
+// Render page to create a new Fam for Google Strategy
+router.get('/update/fam', middleware.isLoggedIn, (req, res) => {
+        let googleId = '';
+        req.user ? googleId = req.user.googleId : null
+        // Pass groupid as blank
+        res.render('groupNew', {groupId: '', groupName: '', token: '', googleId});
+});
+
+// Update user logged in with Google Strategy to assign to a Fam
+router.post('/update/fam', middleware.isLoggedIn, (req, res) => { 
+    // Register user that was not invited
+    User.findById(req.user._id, (err, user) => {
+        if(err) {
+            req.flash('error', err.message);
+            return res.redirect('back');
+        }
+
+        const groupInfo = {
+            name: req.body.familyName
+        }
+
+        ssn = req.session;
+        
+        Group.create(groupInfo, async(err, group) => {
+            if(err) {
+                req.flash('error', 'Something went wrong, try again.');
+                res.redirect('back');
+            } else {
+                // Initiate user's array of groups and add to array
+                user.groups = [group];
+                // Save the user
+                user.save().then(() => {
+                    ssn.currentGroup = group._id;
+                    ssn.currentGroupName = group.name;
+                    // Create admin user
+                    group.adminUser.id = req.user._id;
+                    group.adminUser.username = req.user.username;
+                    // Add user to list of users in group 
+                    group.users = [user];
+                    // Save the new group
+                    group.save().then(() => {
+                        req.flash('success', `Welcome, ${req.user.firstName}!`);
+                        res.redirect('/posts');
+                    });
+                });
+            }
+        })
+    });
 });
 
 // Update user's name
@@ -393,30 +514,6 @@ router.post('/reset', middleware.isLoggedIn, (req, res) => {
                 }
             });
         }
-        /*,
-        function(user, done) {
-            const smtpTransport = nodemailer.createTransport({
-                service: 'Gmail',
-                auth: {
-                    user: 'cardapp77@gmail.com',
-                    pass: process.env.GMAILPW
-                }
-            });
-            const mailOptions = {
-                to: user.email,
-                from: '"Cards" <cardapp77@gmail.com>',
-                subject: 'Your password has been changed',
-                text: `Hi ${user.firstName}, \n\n Your Cards password has just changed.`
-            };
-            smtpTransport.sendMail(mailOptions, (err) => {
-                if(err) {
-                    req.flash('error', 'Something went wrong, try again');
-                    return res.redirect('back');
-                }
-                req.flash('success', 'Success! Your password has been changed.');
-                done(err);
-            })
-        }*/
     ], function(err) {
         if(err) {
             req.flash('error', 'Something went wrong, try again');

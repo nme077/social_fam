@@ -4,7 +4,7 @@
             <div class="list-group-item list-group-item-action active"><%= user.firstName %> <%= user.lastName %></div>
         <% } %>
         <a href="/posts" class="list-group-item list-group-item-action home-btn">Posts</a>
-        <a href="/settings/group" class="list-group-item list-group-item-action group-settings-btn">Settings</a>
+        <a href="/settings" class="list-group-item list-group-item-action group-settings-btn">Settings</a>
         <form action="/logout" method="POST" id="logoutForm" class="list-group-item list-group-item-action list-form logout-btn border-0">
             <a href="javascript:{}" onclick="document.getElementById('logoutForm').submit();" class="list-group-item list-group-item-action border-top-0">Logout</a>
         </form>

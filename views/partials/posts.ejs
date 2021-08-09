@@ -29,10 +29,10 @@
               <i class="fas fa-comment"></i> Comment
             </button>
             <% if(post.user.username === currentUser.username) { %>
-              <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
-                  <button class="btn btn-transparent dropdown-item"><i class="fas fa-trash"></i> Delete post</button>
-              </form>
               <button type="button" class="btn btn-transparent pr-2 edit-post-btn dropdown-item" data-toggle="modal" data-target="#editPostModal" data-whatever="@fat"><i class="fas fa-edit"></i> Edit post</button>
+              <form action="/posts/<%= post._id %>?_method=DELETE" method="POST">
+                <button class="btn btn-transparent text-danger dropdown-item"><i class="fas fa-trash"></i> Delete post</button>
+            </form>
             <% } %>
           </div>
         </div>
@@ -93,7 +93,7 @@
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                       <button type="button" class="btn btn-transparent pr-2 edit-comment-btn dropdown-item" id="<%= comment._id %>-edit" data-toggle="modal" data-target="#editPostModal" data-whatever="@fat"><i class="fas fa-edit"></i> Edit comment</button>
                       <form action="/posts/<%= post._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST" class="float-right">
-                        <button class="btn btn-transparent dropdown-item"><i class="fas fa-trash"></i> Delete comment</button>
+                        <button class="btn btn-transparent text-danger dropdown-item"><i class="fas fa-trash"></i> Delete comment</button>
                       </form>
                     </div>
                   </div>

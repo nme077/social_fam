@@ -30,7 +30,7 @@ router.use((req, res, next) => {
 let inviteLink;
 
 // Show account settings screen
-router.get('/settings/group', middleware.isLoggedIn, (req, res) => {
+router.get('/settings', middleware.isLoggedIn, (req, res) => {
     ssn = req.session;
     const currentGroup = ssn.currentGroup;
     const currentGroupName = ssn.currentGroupName;
@@ -119,7 +119,7 @@ router.post('/settings/group/invite', middleware.isLoggedIn, (req, res, next) =>
                     accessToken: accessToken
                 },
                 to: req.body.email,
-                from: '"Cards" <cardapp77@gmail.com>',
+                from: '"FamSocial" <cardapp77@gmail.com>',
                 subject: `${res.locals.appName} Invite`,
                 text: `Hello, \n\n You have been invited to join ${res.locals.appName}! \n\n Please click the following link or copy and paste it into your browser to join. https://${req.headers.host}/register/${groupToJoin}/${token} \n\n Sincerely, \n Nicholas`,
                 html: `
@@ -219,58 +219,5 @@ router.post('/settings/group', middleware.isLoggedIn, (req, res) => {
         }
     })
 });
-
-
-// Send test email every 12 hours to keep credentials active
-sendTestEmail();
-setInterval(sendTestEmail, 43200000);
-// Send email to check status of gmail server
-function sendTestEmail() {
-    async.waterfall([
-        function(done) {
-            oAuth2Client.getAccessToken((err, token) => {
-                if (err) {
-                    return console.log(err);
-                }
-                done(err, token)
-            });
-        },
-        function(accessToken, done) {
-            const smtpTransport = nodemailer.createTransport({
-                //service: 'Gmail',
-                host: 'smtp.gmail.com',
-                port: 465,
-                secure: true,
-                auth: {
-                    type: 'OAuth2',
-                    clientId: process.env.CLIENT_ID,
-                    clientSecret: process.env.CLIENT_SECRET
-                }
-            });
-
-            const mailOptions = {
-                auth: {
-                    user: 'cardapp77@gmail.com',
-                    refreshToken: process.env.REFRESH_TOKEN,
-                    accessToken: accessToken
-                },
-                to: 'nmemusic77@gmail.com',
-                from: '"FamSocial" <cardapp77@gmail.com>',
-                subject: `FamSocial Email Test`,
-                text: `Email is working today.`,
-            };
-            smtpTransport.sendMail(mailOptions, (err) => {
-                if(err) {
-                    console.log(err)
-                    return done(err, 'done');
-                }
-                console.log('Test email sent')
-                done(err, 'done');
-            });
-        }
-    ], function(err) {
-        if(err) return next(err);
-    });
-};
 
 module.exports = router;

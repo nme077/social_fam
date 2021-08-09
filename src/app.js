@@ -230,4 +230,28 @@ export default function app() {
         $el.attr('hidden', true);
     });
     // End Comment logic
+
+    function generateSuccessMessage(message) {
+        return `
+        <div class="col-md-4 col-sm-12 fixed-bottom alert-container">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>	
+        </div>`
+    };
+
+    function generateErrorMessage(message) {
+        return `
+        <div class="col-md-4 col-sm-12 fixed-bottom alert-container">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>	
+        </div>`
+    };
 }

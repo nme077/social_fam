@@ -30,7 +30,7 @@
                 <a class="nav-link home-btn" href="/posts">Home<span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link group-settings-btn" href="/settings/group">Settings</a>
+                <a class="nav-link group-settings-btn" href="/settings">Settings</a>
               </li>
               <li class="nav-item">
                 <form action="/logout" method="POST">
@@ -54,10 +54,10 @@
         <% } %>
       </nav>
 
-<% if(path !== '/') { %>
+<% if(path === '/posts' || path === '/settings' || path.includes('user')) { %>
   <div class="page-container min-vh-100">
     <div class="content-wrap">
 <% } else { %> 
   <div class="d-flex align-items-center position-relative min-vh-100 overflow-hidden pt-6 pb-lg-5 about-container">
-      <div>
+      <div class="w-100">
 <% } %>

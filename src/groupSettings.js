@@ -2,7 +2,7 @@ const $ = require('jquery');
 const axios = require('axios');
 
 export default function groupSettings() {
-    if(window.location.pathname === '/settings/group') {
+    if(window.location.pathname === '/settings') {
         $('.group-settings-btn').addClass('active');
 
         $(".upload-button").on('click', function() {

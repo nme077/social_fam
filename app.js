@@ -23,6 +23,7 @@ mongoose.connect(process.env.URI, {useNewUrlParser: true, useUnifiedTopology: tr
 
 // Router routes
 const index = require('./routes/index');
+const googleAuthRoutes = require('./routes/authRoutes/googleAuth');
 const commentRoutes = require('./routes/comments');
 const postsRoutes = require('./routes/posts');
 const settingsRoutes = require('./routes/settings');
@@ -37,7 +38,7 @@ app.use(express.static(path.join(__dirname,'/dist')));
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 
-// Setup passport
+// Setup session
 app.use(session({
     cookie: { maxAge: 86400000 },
     store: new MemoryStore({
@@ -51,7 +52,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
-passport.use(new localStrategy(User.authenticate()));
+passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -69,6 +70,7 @@ app.use('/', postsRoutes);
 app.use('/', settingsRoutes);
 app.use('/', mediaRoutes)
 app.use('/posts/:id/comments', commentRoutes);
+app.use(googleAuthRoutes);
 app.use('/', index); // Must be last route
 
 app.get('*', (req, res) => {
