@@ -24,6 +24,7 @@ mongoose.connect(process.env.URI, {useNewUrlParser: true, useUnifiedTopology: tr
 // Router routes
 const index = require('./routes/index');
 const googleAuthRoutes = require('./routes/authRoutes/googleAuth');
+const localAuthRoutes = require('./routes/authRoutes/localAuth');
 const commentRoutes = require('./routes/comments');
 const postsRoutes = require('./routes/posts');
 const settingsRoutes = require('./routes/settings');
@@ -71,6 +72,7 @@ app.use('/', settingsRoutes);
 app.use('/', mediaRoutes)
 app.use('/posts/:id/comments', commentRoutes);
 app.use(googleAuthRoutes);
+app.use(localAuthRoutes);
 app.use('/', index); // Must be last route
 
 app.get('*', (req, res) => {
