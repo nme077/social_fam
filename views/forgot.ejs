@@ -1,0 +1,27 @@
+<%- include('./partials/header.ejs') %>
+
+<div class="container" id="login-form">
+
+    <div class="row justify-content-md-center">
+        <div class="col-md-6 col-l-4">
+            <h1 class="text-left">Forgot Password?</h1>
+            <h6 class="text-muted text-left">Enter your email below and we will send you an email with instructions to reset your password. Your username will be included in the email.</h6>
+
+            <form class="mt-2" action="/forgot" method="POST">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" class="form-control form-control-lg" id="email" name="email" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Send reset link</button>
+            </form>
+            <p class="text-center mt-3">Back to <a href="/login">Sign in</a></p>
+        </div>
+    </div>
+</div>
+
+<div class="bg-social">
+    <i class="fas fa-comment icon-1"></i>
+    <i class="fas fa-comment icon-2"></i>
+</div>
+
+<%- include('./partials/footer.ejs') %>
