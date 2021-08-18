@@ -83,7 +83,7 @@ Install the latest version of [Node.js](https://nodejs.org/en/) (if you do not a
   - Obtain the following credentials and add them to your .env file.
   ```sh
   CLIENT_ID="YOUR_GOOGLE_CLIENT ID"
-  CLIENT_SECRET="YOUR_GOOGLE_CLIENT _ECRET"
+  CLIENT_SECRET="YOUR_GOOGLE_CLIENT_SECRET"
   REDIRECT_URI="http://localhost:3000/settings"
   REFRESH_TOKEN="YOUR_OUATH_2.0_REFRESH_TOKEN"
   CALLBACK_URL="http://localhost:3000/auth/google/callback"
