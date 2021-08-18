@@ -55,11 +55,7 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+Install the latest version of [Node.js](https://nodejs.org/en/) (if you do not already have it)
 
 ### Installation
 
@@ -72,11 +68,41 @@ This is an example of how to list things you need to use the software and how to
    npm install
    ```
    
-### Confirguration
+### Configuration
 
 1. Add .env file with the variables in [.env.example](.env.example)
 
+2. Connect to MongoDB - get started with MongoDB Atlas at https://docs.atlas.mongodb.com/getting-started/
+  - Obtain the unique URI to connect to your MongoDB database add it to your .env file.
+  ```sh
+  URI="mongodb://[username:password@]host1[:port1][,...hostN[:portN]][/[defaultauthdb][?options]]"
+  ```
 
+3. Setup a Google OAuth 2.0 client - get started at https://developers.google.com/identity/protocols/oauth2
+  - Obtain the following credentials and add them to your .env file.
+  ```sh
+  CLIENT_ID="YOUR_GOOGLE_CLIENT ID"
+  CLIENT_SECRET="YOUR_GOOGLE_CLIENT _ECRET"
+  REDIRECT_URI="http://localhost:3000/settings"
+  REFRESH_TOKEN="YOUR_OUATH_2.0_REFRESH_TOKEN"
+  CALLBACK_URL="http://localhost:3000/auth/google/callback"
+  ```
+
+4. Create a Cloudinary account to upload and access photos. Get started at https://cloudinary.com/
+  - Obtain the following information from your Cloudinary account and add them to your .env file.
+  ```sh
+  CLOUD_NAME="YOUR_CLOUD_NAME"
+  API_KEY="YOUR_API_KEY"
+  API_SECRET="YOUR_API_SECRET"
+  ```
+
+
+<!-- RUN THE APP -->
+## Running the app
+
+1. Open a terminal and run ```npm run build``` - keep this running, it will build the app whenever a change is made.
+
+2. Open a second terminal window and run ```npm start```
 
 
 <!-- ROADMAP -->
