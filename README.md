@@ -28,6 +28,7 @@
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
         <li><a href="#Configuration">Configuration</a></li>
+        <li><a href="#running-the-app">Running the app</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
