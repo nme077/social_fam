@@ -114,12 +114,12 @@ router.post('/settings/group/invite', middleware.isLoggedIn, (req, res, next) =>
 
             const mailOptions = {
                 auth: {
-                    user: 'cardapp77@gmail.com',
+                    user: 'nicholaseveland93@gmail.com',
                     refreshToken: process.env.REFRESH_TOKEN,
                     accessToken: accessToken
                 },
                 to: req.body.email,
-                from: '"FamSocial" <cardapp77@gmail.com>',
+                from: '"FamSocial" <nicholaseveland93@gmail.com>',
                 subject: `${res.locals.appName} Invite`,
                 text: `Hello, \n\n You have been invited to join ${res.locals.appName}! \n\n Please click the following link or copy and paste it into your browser to join. https://${req.headers.host}/register/${groupToJoin}/${token} \n\n Sincerely, \n Nicholas`,
                 html: `

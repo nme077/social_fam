@@ -46,7 +46,6 @@
 ### Built With
 
 * [Bootstrap](https://getbootstrap.com/)
-* [jQuery](https://jquery.com/)
 
 
 <!-- GETTING STARTED -->

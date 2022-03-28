@@ -53,7 +53,7 @@ router.post('/forgot', (req, res, next) => {
                 service: 'Gmail',
                 auth: {
                     type: 'OAuth2',
-                    user: 'cardapp77@gmail.com',
+                    user: 'nicholaseveland93@gmail.com',
                     clientId: process.env.CLIENT_ID,
                     clientSecret: process.env.CLIENT_SECRET,
                     refreshToken: process.env.REFRESH_TOKEN,
@@ -62,7 +62,7 @@ router.post('/forgot', (req, res, next) => {
             });
             const mailOptions = {
                 to: user.email,
-                from: '"FamSocial" <cardapp77@gmail.com>',
+                from: '"FamSocial" <nicholaseveland93@gmail.com>',
                 subject: 'FamSocial Password Reset',
                 text: `Hi ${user.firstName}, \n\n Someone requested that the password for your FamSocial account be reset. \n\n Please click the following link or copy and paste it into your browser to reset your password. https://${req.headers.host}/reset/${token} \n\n If you did not request this, you can ignore this email or let us know. Your password won't change until you create a new password. \n\n Sincerely, \n Nicholas`,
                 html: `
@@ -143,7 +143,7 @@ router.post('/reset/:token', (req, res) => {
                 service: 'Gmail',
                 auth: {
                     type: 'OAuth2',
-                    user: 'cardapp77@gmail.com',
+                    user: 'nicholaseveland93@gmail.com',
                     clientId: process.env.CLIENT_ID,
                     clientSecret: process.env.CLIENT_SECRET,
                     refreshToken: process.env.REFRESH_TOKEN,
@@ -152,7 +152,7 @@ router.post('/reset/:token', (req, res) => {
             });
             const mailOptions = {
                 to: user.email,
-                from: '"FamSocial" <cardapp77@gmail.com>',
+                from: '"FamSocial" <nicholaseveland93@gmail.com>',
                 subject: 'Your password has been changed',
                 text: `Hi ${user.firstName}, \n\n Your FamSocial password has just changed.`
             };
